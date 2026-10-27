@@ -63,6 +63,11 @@
   (ADMIN), `GET /workshops/active` y detalle también para TECHNICIAN,
   activar/inactivar (409 con mantenimientos activos), `getActiveWorkshop`
   para la fase de mantenimientos. Vitest 24/24 y HTTP verificado.
+- 2026-10-27: fase 7 en `feature/fleetcore-seeders`. `src/seed.ts` +
+  `npm run seed` (build + `node dist/seed.js`), idempotente con
+  `findOrCreate` por clave natural (email, correo, placa, nombre de taller,
+  vehículo+descripción). Verificado: dos ejecuciones dejan 3/3/2/4/3 y las
+  credenciales sembradas funcionan. Credenciales en README.
 - 2026-10-27: fase 6 en `feature/fleetcore-maintenances`. Crear (transacción
   con FOR UPDATE de vehículo y mecánico), cambio de estado con mapa
   `ALLOWED_CHANGES` (COMPLETED/CANCELLED finales), cierre obligatorio vía
@@ -104,7 +109,5 @@
 - Registro: TECHNICIAN abierto; ADMIN solo con Bearer de ADMIN.
 - Puertos locales: el `.env` de esta máquina usa `PORT=3001` y `DB_PORT=5434`
   (5432, 5433 y 3000 están ocupados por otros proyectos).
-- Requisitos del PDF aún sin implementar: seeder idempotente
-  (`npm run seed`),
-  README con datos del coder, credenciales de prueba y URL de Swagger.
+- Requisitos del PDF aún sin implementar: README con datos del coder, credenciales de prueba y URL de Swagger.
 - Docker Desktop debe estar en ejecución antes de `docker compose up -d db`.

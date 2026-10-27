@@ -19,7 +19,8 @@
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "setup": "node -e \"require('fs').existsSync('.env')||require('fs').copyFileSync('.env.example','.env')\" && npm install",
-    "check": "npm run lint && npx tsc --noEmit -p tsconfig.json && npm run test"
+    "check": "npm run lint && npx tsc --noEmit -p tsconfig.json && npm run test",
+    "seed": "nest build && node dist/seed.js"
   },
   "dependencies": {
     "@nestjs/common": "^12.0.1",

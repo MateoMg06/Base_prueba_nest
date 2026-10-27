@@ -19,6 +19,28 @@ npm run start:dev
 Consulta [la guía de desarrollo](docs/development.md) para comprobar y detener
 PostgreSQL.
 
+## Datos de prueba (seeder)
+
+Con la base levantada ejecuta:
+
+```bash
+npm run seed
+```
+
+Puedes ejecutarlo varias veces: solo crea lo que falta, no duplica registros.
+
+| Rol | Correo | Contraseña |
+|---|---|---|
+| ADMIN | `admin@fleetcore.com` | `Admin123*` |
+| TECHNICIAN | `tecnico1@fleetcore.com` | `Tecnico123*` |
+| TECHNICIAN | `tecnico2@fleetcore.com` | `Tecnico123*` |
+
+Crea además 3 mecánicos (2 activos vinculados a los técnicos y 1 inactivo),
+2 talleres (1 activo y 1 inactivo), 4 vehículos (`ABC123` y `DEF456`
+AVAILABLE, `GHI789` IN_MAINTENANCE y `JKL012` INACTIVE) y 3 mantenimientos:
+uno COMPLETED (historial de `ABC123`), uno IN_PROGRESS (`GHI789`) y uno
+SCHEDULED (`DEF456`).
+
 ## Autenticación y autorización
 
 - `POST /auth/register` (público): crea usuarios `TECHNICIAN`. Para crear un
