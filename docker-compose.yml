@@ -11,6 +11,8 @@ services:
       - "${DB_PORT:-5432}:5432"
     volumes:
       - fleetcore_postgres_data:/var/lib/postgresql/data
+    networks:
+      - fleetcore_network
     healthcheck:
       test:
         [
@@ -21,5 +23,27 @@ services:
       timeout: 5s
       retries: 10
 
+  api:
+    build: .
+    container_name: fleetcore-api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Dentro de la red de Docker la base se llama "db" y escucha en 5432
+      DB_HOST: db
+      DB_PORT: 5432
+      PORT: 3000
+    ports:
+      - "${PORT:-3000}:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - fleetcore_network
+
 volumes:
   fleetcore_postgres_data:
+
+networks:
+  fleetcore_network:
+    driver: bridge

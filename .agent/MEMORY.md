@@ -84,6 +84,13 @@
   `createToken`), comentarios cortos. TypeORM 1.x falla con `undefined` en
   `where`: filtrar con `query.estado ? { estado } : {}`.
 
+- 2026-10-27: fase 8 en `feature/fleetcore-docker`. `Dockerfile`
+  multi-stage (`node:22-alpine`, bcrypt usa prebuild musl, usuario `node`),
+  `.dockerignore` y servicio `api` en `docker-compose.yml` (env_file `.env`,
+  `DB_HOST=db`, espera a `db` healthy, red `fleetcore_network`, volumen
+  `fleetcore_postgres_data`). Verificado: build, Swagger 200, seed dentro del
+  contenedor y login OK con datos persistidos.
+
 ## Convenciones que deben conservarse
 
 - Código simple, nivel junior: sin abstracciones ni helpers extra, nombres
@@ -110,4 +117,6 @@
 - Puertos locales: el `.env` de esta máquina usa `PORT=3001` y `DB_PORT=5434`
   (5432, 5433 y 3000 están ocupados por otros proyectos).
 - Requisitos del PDF aún sin implementar: README con datos del coder, credenciales de prueba y URL de Swagger.
-- Docker Desktop debe estar en ejecución antes de `docker compose up -d db`.
+- Docker Desktop debe estar en ejecución antes de `docker compose up`.
+- Con la API en contenedor, `npm run start:dev` choca con el mismo puerto:
+  detener `api` (`docker compose stop api`) antes de correrla local.

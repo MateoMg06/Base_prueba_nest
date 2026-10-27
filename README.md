@@ -4,10 +4,24 @@ API REST para administrar el mantenimiento preventivo y correctivo de una
 flota de vehículos. Está construida con NestJS, TypeScript, TypeORM y
 PostgreSQL.
 
-> Estado actual: modelo relacional y entorno de desarrollo preparados. Los
-> endpoints, autenticación y seeders se implementarán por funcionalidades.
+## Inicio con Docker (API + PostgreSQL)
 
-## Inicio local
+```bash
+cp .env.example .env
+docker compose up -d --build
+docker compose exec api node dist/seed.js   # datos de prueba
+```
+
+- `api` se construye con el `Dockerfile` (multi-stage, `node:22-alpine`) y
+  arranca cuando `db` está saludable.
+- Ambos servicios comparten la red interna `fleetcore_network`; dentro de
+  ella la API se conecta a `db:5432`.
+- Los datos de PostgreSQL persisten en el volumen `fleetcore_postgres_data`.
+- La API queda en `http://localhost:${PORT}` y Swagger en
+  `http://localhost:${PORT}/docs`.
+- `docker compose down` detiene todo sin borrar datos (`down -v` sí los borra).
+
+## Inicio local (sin contenedor para la API)
 
 ```bash
 cp .env.example .env
