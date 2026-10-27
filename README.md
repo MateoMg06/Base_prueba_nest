@@ -76,6 +76,40 @@ mantenimiento ocupa `[fechaProgramada, fechaProgramada + duración)`: uno de
 | PATCH | `/workshops/:id/deactivate` | ADMIN | Inactivar (409 si tiene mantenimientos activos) |
 | PATCH | `/workshops/:id/activate` | ADMIN | Activar |
 
+## Mantenimientos
+
+| Método | Ruta | Rol | Descripción |
+|---|---|---|---|
+| POST | `/maintenances` | ADMIN | Crear (empieza `SCHEDULED`) |
+| GET | `/maintenances?page&limit&estado` | ADMIN | Todos (paginado) |
+| GET | `/maintenances/active` | ADMIN | Activos (`SCHEDULED` o `IN_PROGRESS`) |
+| GET | `/maintenances/vehicle/:vehicleId` | ADMIN | Por vehículo |
+| GET | `/maintenances/vehicle/:vehicleId/history` | ADMIN | Historial (`COMPLETED`) del vehículo |
+| GET | `/maintenances/mechanic/:mechanicId` | ADMIN | Asignados a un mecánico |
+| GET | `/maintenances/mine` | TECHNICIAN | Los asignados al técnico logueado |
+| GET | `/maintenances/:id` | ADMIN, TECHNICIAN | Detalle (el técnico solo los suyos) |
+| PATCH | `/maintenances/:id/status` | ADMIN, TECHNICIAN | Cambiar estado |
+
+Reglas al crear: vehículo, mecánico y taller deben existir y estar activos;
+el vehículo no puede tener otro mantenimiento activo; el kilometraje no puede
+ser menor al del vehículo; el horario del mecánico no puede cruzarse con otro.
+
+Cambios de estado permitidos:
+
+```text
+SCHEDULED   -> IN_PROGRESS | CANCELLED
+IN_PROGRESS -> COMPLETED   | CANCELLED
+COMPLETED y CANCELLED son finales
+```
+
+- `IN_PROGRESS`: el vehículo pasa a `IN_MAINTENANCE`; el mecánico no puede
+  tener otro mantenimiento en curso.
+- `COMPLETED`: exige `trabajoRealizado`, `costoFinal`, `fechaFinalizacion` y
+  `kilometrajeFinal`; el vehículo vuelve a `AVAILABLE` con el nuevo kilometraje.
+- Cancelar uno en curso devuelve el vehículo a `AVAILABLE`.
+
+Crear y cambiar de estado se hacen en transacciones con bloqueo de filas.
+
 ## Estructura
 
 ```text

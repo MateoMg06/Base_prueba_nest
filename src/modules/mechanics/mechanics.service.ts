@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { EntityManager, In, Repository } from 'typeorm';
 import { Role } from '../../common/enums/role.enum.js';
 import { Maintenance } from '../maintenances/entities/maintenance.entity.js';
 import { MaintenanceStatus } from '../maintenances/enums/maintenance-status.enum.js';
@@ -118,15 +118,19 @@ export class MechanicsService {
   // Revisa que el mecánico no tenga otro mantenimiento activo que se cruce
   // con el horario [start, start + minutes), en ningún taller.
   // Ej: si tiene uno de 7:30 a 9:00, uno a las 8:00 choca y uno a las 9:00 no.
+  // Si se llama dentro de una transacción se le pasa su manager.
   async checkSchedule(
     mechanicId: number,
     start: Date,
     minutes: number,
-    ignoreMaintenanceId?: number,
+    manager?: EntityManager,
   ) {
     const end = new Date(start.getTime() + minutes * 60 * 1000);
+    const repository = manager
+      ? manager.getRepository(Maintenance)
+      : this.maintenanceRepository;
 
-    const query = this.maintenanceRepository
+    const conflict = await repository
       .createQueryBuilder('m')
       .where('m.mecanico = :mechanicId', { mechanicId })
       .andWhere('m.estado IN (:...statuses)', { statuses: ACTIVE_STATUSES })
@@ -134,12 +138,8 @@ export class MechanicsService {
       .andWhere(
         "m.fechaProgramada + m.duracionEstimadaMinutos * INTERVAL '1 minute' > :start",
         { start },
-      );
-    if (ignoreMaintenanceId) {
-      query.andWhere('m.id <> :ignoreMaintenanceId', { ignoreMaintenanceId });
-    }
-
-    const conflict = await query.getOne();
+      )
+      .getOne();
     if (conflict) {
       throw new ConflictException(
         `El mecánico ${mechanicId} ya tiene el mantenimiento ${conflict.id} en ese horario`,

@@ -63,6 +63,15 @@
   (ADMIN), `GET /workshops/active` y detalle también para TECHNICIAN,
   activar/inactivar (409 con mantenimientos activos), `getActiveWorkshop`
   para la fase de mantenimientos. Vitest 24/24 y HTTP verificado.
+- 2026-10-27: fase 6 en `feature/fleetcore-maintenances`. Crear (transacción
+  con FOR UPDATE de vehículo y mecánico), cambio de estado con mapa
+  `ALLOWED_CHANGES` (COMPLETED/CANCELLED finales), cierre obligatorio vía
+  `@ValidateIf` en `UpdateStatusDto`, vehículo IN_MAINTENANCE/AVAILABLE
+  sincronizado, consultas (todos, activos, por vehículo, historial, por
+  mecánico, `mine` del técnico) y técnico limitado a lo suyo. Decisión del
+  usuario: "técnico no puede tener más de un mantenimiento activo
+  simultáneamente" = no más de uno IN_PROGRESS a la vez. Vitest 35/35; 21
+  escenarios HTTP y 5 creaciones concurrentes (1x201, 4x409) verificados.
 - 2026-10-27: código simplificado a nivel junior por pedido del usuario:
   paginación solo `page`/`limit` (sin sortBy/order), sin `Paginated<T>` ni
   `@ApiPaginatedResponse`, repositorios llamados `xRepository`, nombres
@@ -95,9 +104,7 @@
 - Registro: TECHNICIAN abierto; ADMIN solo con Bearer de ADMIN.
 - Puertos locales: el `.env` de esta máquina usa `PORT=3001` y `DB_PORT=5434`
   (5432, 5433 y 3000 están ocupados por otros proyectos).
-- Requisitos del PDF aún sin implementar: mantenimientos con
-  sus reglas (transiciones de
-  estado, kilometraje), seeder idempotente
+- Requisitos del PDF aún sin implementar: seeder idempotente
   (`npm run seed`),
   README con datos del coder, credenciales de prueba y URL de Swagger.
 - Docker Desktop debe estar en ejecución antes de `docker compose up -d db`.
