@@ -17,7 +17,7 @@ export class ErrorResponseDto {
   })
   message: string | string[];
 
-  @ApiProperty({ example: '/solicitudes' })
+  @ApiProperty({ example: '/maintenances' })
   path: string;
 
   @ApiProperty({ example: 'POST' })

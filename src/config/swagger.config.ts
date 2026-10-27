@@ -10,10 +10,10 @@ export const USER_SECURITY = 'x-user';
 
 export function setupSwagger(app: INestApplication, path: string) {
   const config = new DocumentBuilder()
-    .setTitle('API Solicitudes Comerciales')
+    .setTitle('FleetCore API')
     .setDescription(
       [
-        'API REST para registrar y gestionar solicitudes de seguimiento comercial.',
+        'API REST para gestionar el mantenimiento de la flota de FleetCore.',
         '',
         '**Cómo probar:** pulsa **Authorize** e ingresa:',
         `- \`${API_KEY_HEADER}\`: una de las claves de \`API_KEYS\` en tu .env (ej. \`dev-key-123\`).`,

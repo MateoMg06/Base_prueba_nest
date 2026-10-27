@@ -2,9 +2,16 @@
 
 ## Propósito y alcance
 
-Este repositorio es una base modular de NestJS. Preserva lo transversal en
-`src/config`, `src/core`, `src/common` y `src/database`; implementa o adapta
-el dominio únicamente dentro de `src/modules`.
+Este repositorio implementa FleetCore con NestJS. Preserva la infraestructura
+en `src/config`, `src/core` y `src/database`; cada recurso de negocio vive
+directamente en `src/<recurso>`.
+
+La separación transversal es:
+
+- `src/common`: entidades base, constantes, DTOs, enums, interfaces y
+  utilidades reutilizables.
+- `src/shared`: decoradores, guards, filtros e interceptores aplicados a los
+  recursos.
 
 El documento `División del proyecto.txt.md` entregado junto con este
 repositorio contiene requisitos del dominio FleetCore. Trátalo como referencia
@@ -57,9 +64,9 @@ conservar solo los hitos recientes; resume o sustituye información obsoleta.
   existentes en lugar de duplicarlos.
 - Usa DTOs con `class-validator`, tipado estricto y respuestas/errores acordes
   con las convenciones de `common`.
-- No sustituyas SQLite, el esquema de autenticación ni la infraestructura
-  transversal sin una solicitud explícita. Para un nuevo dominio, añade módulos
-  y adapta la composición de `AppModule` de forma incremental.
+- No sustituyas PostgreSQL, el esquema de autenticación ni la infraestructura
+  transversal sin una solicitud explícita. Añade los nuevos recursos
+  directamente bajo `src/` y compónlos en `AppModule`.
 - Nunca añadas credenciales reales, `.env`, bases de datos locales ni artefactos
   generados al control de versiones.
 - Respeta los cambios existentes del usuario: no hagas resets, borrados masivos

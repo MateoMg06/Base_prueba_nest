@@ -3,12 +3,12 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import configuration from '../config/configuration.js';
 import { validateEnv } from '../config/env.validation.js';
-import { ApiKeyGuard } from '../common/guards/api-key.guard.js';
-import { UserGuard } from '../common/guards/user.guard.js';
-import { RolesGuard } from '../common/guards/roles.guard.js';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor.js';
-import { AllExceptionsFilter } from '../common/filters/all-exceptions.filter.js';
-import { UsersModule } from '../modules/users/users.module.js';
+import { ApiKeyGuard } from '../shared/guards/api-key.guard.js';
+import { UserGuard } from '../shared/guards/user.guard.js';
+import { RolesGuard } from '../shared/guards/roles.guard.js';
+import { ResponseInterceptor } from '../shared/interceptors/response.interceptor.js';
+import { AllExceptionsFilter } from '../shared/filters/all-exceptions.filter.js';
+import { UsersModule } from '../users/users.module.js';
 
 /**
  * Infraestructura transversal registrada UNA sola vez.
