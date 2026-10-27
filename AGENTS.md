@@ -44,6 +44,12 @@ conservar solo los hitos recientes; resume o sustituye información obsoleta.
 
 ## Forma de trabajo
 
+- Usa ramas por funcionalidad completa y conserva `main` para avances
+  integrados. No crees ramas para ajustes aislados: inclúyelos en la rama de
+  la funcionalidad a la que pertenecen.
+- Nombra las ramas como `feature/fleetcore-<funcionalidad>` y usa commits
+  descriptivos con la identidad Git configurada por el usuario. Integra una
+  rama solo cuando su funcionalidad esté verificada.
 - Inspecciona primero el módulo relacionado, sus DTOs, entidades, pruebas y
   documentación antes de modificar código.
 - Mantén controladores delgados; coloca reglas de negocio y acceso a datos en

@@ -19,6 +19,10 @@
 - 2026-10-27: fase 0 iniciada. Se instaló `pg`, se creó `docker-compose.yml`
   para PostgreSQL 16 y se configuraron `.env.example` y `.env` locales para
   FleetCore.
+- 2026-10-27: fase 1 completada en `feature/fleetcore-domain-model`. Se
+  añadieron las entidades `User`, `Vehicle`, `Mechanic`, `Workshop` y
+  `Maintenance`, con sus enums, relaciones e índices, además del ERD en
+  `docs/erd.md`.
 
 ## Convenciones que deben conservarse
 
@@ -30,6 +34,8 @@
 - `.env`, la carpeta `data/` y artefactos generados son locales y no se versionan.
 - `docker compose up -d db` inicia la base PostgreSQL con las credenciales
   ficticias de `.env.example`.
+- Se trabaja por ramas de funcionalidad `feature/fleetcore-<funcionalidad>`;
+  los ajustes menores se incluyen en la funcionalidad relacionada.
 
 ## Pendientes conocidos
 
@@ -37,5 +43,6 @@
   iniciarse. Arráncalo antes de ejecutar `docker compose up -d db`.
 - `npm run build` está bloqueado por un defecto preexistente en la base: falta
   el archivo versionado esperado `src/modules/users/data/users.data.ts`.
-- Fase siguiente: diseñar las entidades, enums y relaciones del dominio
-  FleetCore; no comenzar controladores ni autenticación todavía.
+- Fase siguiente: sustituir la autenticación temporal por usuarios persistidos,
+  Argon2, JWT, roles y guards. En esa fase se retirará la dependencia de
+  `users.data.ts`.
