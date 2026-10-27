@@ -21,8 +21,8 @@ Swagger, Jest y Docker.
 ### Opción 1: todo con Docker (API + PostgreSQL)
 
 ```bash
-git clone https://github.com/MateoMg06/Base_prueba_nest.git
-cd Base_prueba_nest
+git clone https://github.com/MateoMg06/PruebaDesempenoNest.git
+cd PruebaDesempenoNest
 cp .env.example .env          # cambia JWT_SECRET por una clave propia
 docker compose up -d --build
 docker compose exec api node dist/seed.js   # datos de prueba
