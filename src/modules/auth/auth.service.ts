@@ -29,8 +29,8 @@ export class AuthService {
   ) {}
 
   /**
-   * Registro abierto para TECHNICIAN. Crear ADMIN o MANAGER exige que quien
-   * registra sea un ADMIN autenticado, para que nadie se autoasigne privilegios.
+   * Registro abierto para TECHNICIAN. Crear un ADMIN exige que quien registra
+   * sea un ADMIN autenticado, para que nadie se autoasigne privilegios.
    */
   async register(
     dto: RegisterDto,

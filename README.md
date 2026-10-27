@@ -21,8 +21,8 @@ PostgreSQL.
 
 ## Autenticación y autorización
 
-- `POST /auth/register` (público): crea usuarios `TECHNICIAN`. Para crear
-  `ADMIN` o `MANAGER` envía el `Bearer` de un ADMIN.
+- `POST /auth/register` (público): crea usuarios `TECHNICIAN`. Para crear un
+  `ADMIN` envía el `Bearer` de un ADMIN.
 - `POST /auth/login` (público): correo + contraseña → JWT (`JWT_EXPIRES_IN`
   segundos). Las contraseñas se guardan con bcrypt (12 rondas).
 - `GET /auth/me`: datos del token actual.
@@ -31,12 +31,9 @@ PostgreSQL.
 - `GET /integrations/fleet-status`: integración externa protegida solo con
   `x-api-key` (una de `API_KEYS`).
 
-Toda respuesta incluye `statusCodeInWords` (p. ej. `404` → `"cuatro cero
-cuatro"`).
-
 ## Vehículos
 
-Escritura solo `ADMIN`; consulta `ADMIN` y `MANAGER`.
+Todas las operaciones son exclusivas del rol `ADMIN`.
 
 | Método | Ruta | Descripción |
 |---|---|---|

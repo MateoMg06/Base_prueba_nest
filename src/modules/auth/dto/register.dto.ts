@@ -39,8 +39,7 @@ export class RegisterDto {
   @ApiPropertyOptional({
     enum: Role,
     default: Role.TECHNICIAN,
-    description:
-      'ADMIN y MANAGER solo pueden ser asignados por un ADMIN autenticado',
+    description: 'ADMIN solo puede ser asignado por un ADMIN autenticado',
   })
   @IsOptional()
   @IsEnum(Role)

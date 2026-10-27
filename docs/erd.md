@@ -59,7 +59,7 @@ erDiagram
 
 - Las placas, correos de usuario y correos de mecánico son únicos.
 - La relación entre un usuario y un mecánico es opcional y uno a uno: permite
-  registrar administradores o managers sin ficha de mecánico y conservar un
+  registrar administradores sin ficha de mecánico y conservar un
   mecánico sin cuenta de acceso.
 - Los mantenimientos conservan las relaciones históricas: las claves foráneas
   restringen borrar vehículos, mecánicos o talleres que ya tengan historial.

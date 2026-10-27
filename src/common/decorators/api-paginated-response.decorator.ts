@@ -11,7 +11,6 @@ export const ApiPaginatedResponse = <T extends Type<unknown>>(model: T) =>
         properties: {
           success: { type: 'boolean', example: true },
           statusCode: { type: 'number', example: 200 },
-          statusCodeInWords: { type: 'string', example: 'dos cero cero' },
           data: {
             type: 'object',
             properties: {

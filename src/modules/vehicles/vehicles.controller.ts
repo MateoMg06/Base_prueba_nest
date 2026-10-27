@@ -29,17 +29,16 @@ import { VehicleQueryDto } from './dto/vehicle-query.dto.js';
 import { Vehicle } from './entities/vehicle.entity.js';
 import { VehiclesService } from './vehicles.service.js';
 
-/** Gestión de la flota: escritura solo ADMIN; consulta ADMIN y MANAGER. */
+/** Gestión de la flota: exclusiva del ADMIN (registro, consulta y edición). */
 @ApiTags('Vehículos')
 @ApiBearerAuth()
 @ApiCommonErrors()
-@Roles(Role.ADMIN, Role.MANAGER)
+@Roles(Role.ADMIN)
 @Controller('vehicles')
 export class VehiclesController {
   constructor(private readonly vehiclesService: VehiclesService) {}
 
   @Post()
-  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Registrar vehículo (nace AVAILABLE)' })
   @ApiWrappedResponse(Vehicle, { status: HttpStatus.CREATED })
   @ApiConflictResponse({
@@ -74,7 +73,6 @@ export class VehiclesController {
   }
 
   @Patch(':id')
-  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Actualizar datos del vehículo' })
   @ApiWrappedResponse(Vehicle)
   @ApiNotFoundResponse({ type: ErrorResponseDto })
@@ -87,7 +85,6 @@ export class VehiclesController {
   }
 
   @Delete(':id')
-  @Roles(Role.ADMIN)
   @ApiOperation({
     summary: 'Inactivar vehículo (eliminación lógica, conserva historial)',
   })
@@ -102,7 +99,6 @@ export class VehiclesController {
   }
 
   @Patch(':id/activate')
-  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Reactivar vehículo INACTIVE (queda AVAILABLE)' })
   @ApiWrappedResponse(Vehicle)
   @ApiConflictResponse({

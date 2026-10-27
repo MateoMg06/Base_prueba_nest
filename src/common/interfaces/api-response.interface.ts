@@ -2,7 +2,6 @@
 export interface ApiResponse<T> {
   success: true;
   statusCode: number;
-  statusCodeInWords: string;
   data: T;
   timestamp: string;
 }

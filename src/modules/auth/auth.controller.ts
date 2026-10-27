@@ -34,7 +34,7 @@ export class AuthController {
   @ApiOperation({
     summary: 'Registrar usuario',
     description:
-      'Abierto para TECHNICIAN. Para ADMIN o MANAGER envía el Bearer de un ADMIN.',
+      'Abierto para TECHNICIAN. Para registrar un ADMIN envía el Bearer de un ADMIN.',
   })
   @ApiWrappedResponse(AuthUserDto, { status: HttpStatus.CREATED })
   @ApiConflictResponse({

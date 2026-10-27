@@ -7,12 +7,10 @@ import {
 import { Response } from 'express';
 import { map, Observable } from 'rxjs';
 import { ApiResponse } from '../interfaces/api-response.interface.js';
-import { statusCodeToWords } from '../utils/status-code-words.util.js';
 
 /**
  * Envuelve toda respuesta exitosa en:
- * { success: true, statusCode, statusCodeInWords, data, timestamp }
- * statusCodeInWords escribe el código dígito a dígito: 201 -> "dos cero uno".
+ * { success: true, statusCode, data, timestamp }
  */
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<
@@ -29,7 +27,6 @@ export class ResponseInterceptor<T> implements NestInterceptor<
       map((data) => ({
         success: true as const,
         statusCode: response.statusCode,
-        statusCodeInWords: statusCodeToWords(response.statusCode),
         data: data ?? (null as T),
         timestamp: new Date().toISOString(),
       })),
