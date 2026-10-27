@@ -99,6 +99,14 @@
   users. 51/51 pruebas; cobertura ~59% líneas, 50% ramas, 44% funciones
   (umbral 40%; el usuario pidió no pasar de 80%). `npm run check` OK.
 
+- 2026-10-27: fase 10 en `feature/fleetcore-oauth-github`. `GithubService`
+  (fetch nativo, sin passport): `GET /auth/github` redirige con `state`
+  (JWT firmado con el client secret, 10 min, no sirve como Bearer) y
+  `GET /auth/github/callback` cambia el code por token, toma el correo
+  principal verificado, busca o crea el usuario (TECHNICIAN) y devuelve
+  `createToken`. Variables `GITHUB_*` opcionales (sin ellas 503). 57/57
+  pruebas; 302, 401 (state falso) y 400 verificados en el contenedor.
+
 ## Convenciones que deben conservarse
 
 - Código simple, nivel junior: sin abstracciones ni helpers extra, nombres

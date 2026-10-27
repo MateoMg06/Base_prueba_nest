@@ -64,6 +64,13 @@ SCHEDULED (`DEF456`).
 - `GET /auth/me`: datos del token actual.
 - Todas las demás rutas exigen `Authorization: Bearer <token>`; los roles se
   declaran con `@Roles(...)`.
+- `GET /auth/github` (público, abrir en el navegador): login con GitHub
+  (OAuth 2.0). GitHub vuelve a `GET /auth/github/callback`, que valida el
+  `state`, usa el correo principal verificado de GitHub, crea el usuario como
+  `TECHNICIAN` si no existe y entrega el mismo JWT del login normal.
+  Requiere una OAuth App de GitHub y `GITHUB_CLIENT_ID`,
+  `GITHUB_CLIENT_SECRET` y `GITHUB_CALLBACK_URL` en `.env` (sin ellas la ruta
+  responde 503).
 - `GET /integrations/fleet-status`: integración externa protegida solo con
   `x-api-key` (una de `API_KEYS`).
 

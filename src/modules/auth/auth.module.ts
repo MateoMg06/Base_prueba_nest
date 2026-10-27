@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from '../users/users.module.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
+import { GithubService } from './github.service.js';
 
 /**
  * JwtModule es global para que JwtAuthGuard (registrado como APP_GUARD en
@@ -22,7 +23,7 @@ import { AuthService } from './auth.service.js';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, GithubService],
   exports: [AuthService],
 })
 export class AuthModule {}

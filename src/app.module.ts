@@ -52,6 +52,11 @@ const configuration = () => ({
     secret: process.env.JWT_SECRET,
     expiresIn: parseInt(process.env.JWT_EXPIRES_IN ?? '3600', 10),
   },
+  github: {
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackUrl: process.env.GITHUB_CALLBACK_URL,
+  },
   database: {
     database: process.env.DB_DATABASE ?? 'fleetcore',
     host: process.env.DB_HOST ?? 'localhost',
@@ -127,6 +132,19 @@ class EnvironmentVariables {
   @IsInt()
   @Min(60)
   JWT_EXPIRES_IN?: number;
+
+  // Login con GitHub (opcional): si faltan, /auth/github responde 503
+  @IsOptional()
+  @IsString()
+  GITHUB_CLIENT_ID?: string;
+
+  @IsOptional()
+  @IsString()
+  GITHUB_CLIENT_SECRET?: string;
+
+  @IsOptional()
+  @IsString()
+  GITHUB_CALLBACK_URL?: string;
 }
 
 function validateEnv(config: Record<string, unknown>) {
