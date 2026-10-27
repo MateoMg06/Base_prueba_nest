@@ -31,13 +31,17 @@
   `npm run check` OK (lint, tsc, 5 pruebas).
 
 - 2026-10-27: fase 2 en `feature/fleetcore-auth`. `AuthModule` (register,
-  login, me; argon2id; `JwtModule` global con `JWT_SECRET`/`JWT_EXPIRES_IN`),
+  login, me; bcrypt; `JwtModule` global con `JWT_SECRET`/`JWT_EXPIRES_IN`),
   `UsersService` con repositorio, `JwtAuthGuard` real (token opcional en rutas
   públicas), `@ApiKeyAuth()` + `IntegrationsModule`
   (`GET /integrations/fleet-status`), `statusCodeInWords` en interceptor y
   filtro. Relaciones de entidades tipadas con `Relation<T>` (ESM circular).
   Vitest 10/10, tsc y lint OK; probado contra PostgreSQL: register, 409,
   403 de rol, 400, login, 401 (sin token, inválido, expirado), x-api-key y 404.
+
+- 2026-10-27: por decisión explícita del usuario las contraseñas usan bcrypt
+  (12 rondas, máx. 72 bytes) en lugar de argon2, aunque el PDF (req. 1.3)
+  pide argon2. Probado: register, login, 401 y 400 por >72 bytes.
 
 ## Convenciones que deben conservarse
 

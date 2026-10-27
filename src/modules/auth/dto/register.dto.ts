@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
   IsEmail,
+  IsByteLength,
   IsEnum,
   IsNotEmpty,
   IsOptional,
@@ -31,7 +32,8 @@ export class RegisterDto {
   @ApiProperty({ example: 'Secreta123', minLength: 8 })
   @IsString()
   @MinLength(8)
-  @MaxLength(72)
+  // bcrypt solo usa los primeros 72 BYTES; más allá se ignorarían en silencio.
+  @IsByteLength(0, 72, { message: 'password no puede superar 72 bytes' })
   password: string;
 
   @ApiPropertyOptional({

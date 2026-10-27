@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import * as argon2 from 'argon2';
+import * as bcrypt from 'bcrypt';
 import { Role } from '../../common/enums/role.enum.js';
 import {
   AuthenticatedUser,
@@ -16,6 +16,9 @@ import { UsersService } from '../users/users.service.js';
 import { AuthTokenDto, AuthUserDto } from './dto/auth-response.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RegisterDto } from './dto/register.dto.js';
+
+/** Coste de bcrypt: 2^12 iteraciones, buen equilibrio seguridad/latencia. */
+const BCRYPT_SALT_ROUNDS = 12;
 
 @Injectable()
 export class AuthService {
@@ -43,7 +46,7 @@ export class AuthService {
     const user = await this.usersService.create({
       nombre: dto.nombre,
       email: dto.email,
-      passwordHash: await argon2.hash(dto.password, { type: argon2.argon2id }),
+      passwordHash: await bcrypt.hash(dto.password, BCRYPT_SALT_ROUNDS),
       role,
     });
     return this.toAuthUser(user);
@@ -54,7 +57,7 @@ export class AuthService {
     const user = await this.usersService.findByEmailWithPassword(dto.email);
     const valid =
       user?.passwordHash !== undefined &&
-      (await argon2.verify(user.passwordHash, dto.password));
+      (await bcrypt.compare(dto.password, user.passwordHash));
     if (!user || !valid) {
       throw new UnauthorizedException('Credenciales inválidas');
     }

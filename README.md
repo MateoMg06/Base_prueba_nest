@@ -24,7 +24,7 @@ PostgreSQL.
 - `POST /auth/register` (público): crea usuarios `TECHNICIAN`. Para crear
   `ADMIN` o `MANAGER` envía el `Bearer` de un ADMIN.
 - `POST /auth/login` (público): correo + contraseña → JWT (`JWT_EXPIRES_IN`
-  segundos). Las contraseñas se guardan con argon2id.
+  segundos). Las contraseñas se guardan con bcrypt (12 rondas).
 - `GET /auth/me`: datos del token actual.
 - Todas las demás rutas exigen `Authorization: Bearer <token>`; los roles se
   declaran con `@Roles(...)`.
