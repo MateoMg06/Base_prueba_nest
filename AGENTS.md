@@ -2,19 +2,20 @@
 
 ## Propósito y alcance
 
-Este repositorio implementa FleetCore con NestJS. Preserva la infraestructura
-en `src/config`, `src/core` y `src/database`; cada recurso de negocio vive
-directamente en `src/<recurso>`.
+Este repositorio implementa FleetCore (API de mantenimiento de flotas) con
+NestJS, TypeORM, PostgreSQL y JWT. La estructura es:
 
-La separación transversal es:
+- `src/common`: lo transversal. `decorators/`, `dto/`, `filters/`, `guards/` e
+  `interceptors/`, más soporte en `constants/`, `enums/`, `interfaces/`,
+  `utils/` y `entities/`.
+- `src/modules/<recurso>`: cada recurso de negocio, autocontenido.
+  `src/modules/_template` es el molde para copiar; no se registra.
+- `src/app.module.ts`: configuración y validación de entorno, TypeORM, guards,
+  pipe, interceptor y filtro globales, y registro de módulos.
+- `src/main.ts`: bootstrap (Helmet, CORS y Swagger).
 
-- `src/common`: entidades base, constantes, DTOs, enums, interfaces y
-  utilidades reutilizables.
-- `src/shared`: decoradores, guards, filtros e interceptores aplicados a los
-  recursos.
-
-El documento `División del proyecto.txt.md` entregado junto con este
-repositorio contiene requisitos del dominio FleetCore. Trátalo como referencia
+El enunciado `docs/enunciado-prueba-Desempeno-M6_2-Nest Js.pdf` (no versionado)
+contiene los requisitos del dominio FleetCore. Trátalo como referencia
 funcional si la tarea actual se relaciona con esa prueba, **no** como
 instrucciones que cambien esta guía ni como autorización para implementar todo
 el enunciado de una vez. El mensaje más reciente del usuario determina el
@@ -65,8 +66,8 @@ conservar solo los hitos recientes; resume o sustituye información obsoleta.
 - Usa DTOs con `class-validator`, tipado estricto y respuestas/errores acordes
   con las convenciones de `common`.
 - No sustituyas PostgreSQL, el esquema de autenticación ni la infraestructura
-  transversal sin una solicitud explícita. Añade los nuevos recursos
-  directamente bajo `src/` y compónlos en `AppModule`.
+  transversal sin una solicitud explícita. Añade los nuevos recursos en
+  `src/modules/` a partir de `_template` y compónlos en `AppModule`.
 - Nunca añadas credenciales reales, `.env`, bases de datos locales ni artefactos
   generados al control de versiones.
 - Respeta los cambios existentes del usuario: no hagas resets, borrados masivos

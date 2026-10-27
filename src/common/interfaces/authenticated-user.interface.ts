@@ -1,10 +1,10 @@
 import { Request } from 'express';
 import { Role } from '../enums/role.enum.js';
 
-/** Usuario validado por UserGuard y adjuntado a request.user. */
+/** Usuario autenticado por JwtAuthGuard y adjuntado a request.user. */
 export interface AuthenticatedUser {
-  username: string;
-  name: string;
+  id: number;
+  email: string;
   role: Role;
 }
 

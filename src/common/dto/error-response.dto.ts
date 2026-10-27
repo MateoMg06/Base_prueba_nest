@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-/** Forma de TODAS las respuestas de error (generada por AllExceptionsFilter). */
+/** Forma de TODAS las respuestas de error (generada por HttpExceptionFilter). */
 export class ErrorResponseDto {
   @ApiProperty({ example: false })
   success: false;
@@ -13,7 +13,7 @@ export class ErrorResponseDto {
 
   @ApiProperty({
     oneOf: [{ type: 'string' }, { type: 'array', items: { type: 'string' } }],
-    example: ['cliente should not be empty'],
+    example: ['placa should not be empty'],
   })
   message: string | string[];
 

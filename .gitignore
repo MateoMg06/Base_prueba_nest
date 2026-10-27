@@ -9,11 +9,6 @@ coverage/
 .env.*
 !.env.example
 
-# base de datos local
-data/
-*.sqlite
-*.sqlite-journal
-
 # logs / sistema / IDE
 *.log
 npm-debug.log*

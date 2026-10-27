@@ -1,6 +1,6 @@
-/** Roles del sistema. Agrega/quita valores aquí y en users.data.ts si el enunciado cambia. */
+/** Roles del sistema definidos por el enunciado de FleetCore. */
 export enum Role {
-  ADMIN = 'admin',
-  SUPERVISOR = 'supervisor',
-  ASESOR = 'asesor',
+  ADMIN = 'ADMIN',
+  TECHNICIAN = 'TECHNICIAN',
+  MANAGER = 'MANAGER',
 }

@@ -1,3 +1,2 @@
-/** Nombres de encabezados usados por los guards. Cámbialos aquí si el enunciado usa otros. */
+/** Encabezado que usan las integraciones externas para autenticarse con API Key. */
 export const API_KEY_HEADER = 'x-api-key';
-export const USER_HEADER = 'x-user';

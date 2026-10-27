@@ -1,7 +1,7 @@
 {
   "name": "base-prueba-desempeno-nestjs",
   "version": "0.0.1",
-  "description": "Base modular NestJS + TypeORM + SQLite: API Key, roles, DTO, interceptor, filtro y Swagger",
+  "description": "FleetCore: API REST de mantenimiento de flotas con NestJS, TypeORM, PostgreSQL y JWT",
   "author": "promptingeniers@gmail.com",
   "private": true,
   "license": "UNLICENSED",
@@ -18,11 +18,8 @@
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
-    "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
     "setup": "node -e \"require('fs').existsSync('.env')||require('fs').copyFileSync('.env.example','.env')\" && npm install",
-    "db:reset": "node -e \"require('fs').rmSync('data',{recursive:true,force:true})\"",
-    "test:all": "npm run test && npm run test:e2e",
-    "check": "npm run lint && npx tsc --noEmit -p tsconfig.json && npm run test:all"
+    "check": "npm run lint && npx tsc --noEmit -p tsconfig.json && npm run test"
   },
   "dependencies": {
     "@nestjs/common": "^12.0.1",
@@ -31,9 +28,9 @@
     "@nestjs/platform-express": "^12.0.1",
     "@nestjs/swagger": "^12.0.4",
     "@nestjs/typeorm": "^12.0.2",
-    "better-sqlite3": "^12.11.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
+    "helmet": "^8.3.0",
     "pg": "^8.23.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
@@ -44,7 +41,6 @@
     "@nestjs/mau": "^0.2.6",
     "@nestjs/schematics": "^12.0.0",
     "@nestjs/testing": "^12.0.1",
-    "@types/better-sqlite3": "^9.6.0",
     "@types/express": "^5.0.0",
     "@types/node": "^24.0.0",
     "@types/supertest": "^7.0.0",

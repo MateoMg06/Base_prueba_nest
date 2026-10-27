@@ -23,19 +23,22 @@ PostgreSQL.
 
 ```text
 src/
-├── users/             # Usuarios, roles y autenticación persistida
-├── vehicles/          # Vehículos de la flota
-├── mechanics/         # Mecánicos y su disponibilidad
-├── workshops/         # Talleres
-├── maintenances/      # Ciclo de vida de los mantenimientos
-├── common/            # Entidades base, enums, DTOs, interfaces y utilidades
-├── shared/            # Decoradores, guards, filtros e interceptores
-├── config/            # Variables de entorno y Swagger
-├── core/              # Registro de infraestructura global
-├── database/          # Conexión TypeORM
-├── app.module.ts
-└── main.ts
+├── common/                  # Utilidades transversales globales
+│   ├── decorators/          # @Public(), @Roles(), @CurrentUser(), helpers de Swagger
+│   ├── dto/                 # PaginationQueryDto y DTO de error
+│   ├── filters/             # HttpExceptionFilter: formato JSON de errores
+│   ├── guards/              # JwtAuthGuard → RolesGuard (globales) y ApiKeyGuard (integraciones)
+│   ├── interceptors/        # ResponseInterceptor: sobre JSON de éxito
+│   └── constants/ enums/ interfaces/ utils/ entities/   # soporte compartido
+├── modules/                 # Módulos de dominio autocontenidos
+│   ├── _template/           # Molde CRUD (no registrado) para copiar
+│   ├── users/  vehicles/  mechanics/  workshops/  maintenances/
+├── app.module.ts            # Config + validación de env, TypeORM, globales y features
+└── main.ts                  # Bootstrap: Helmet, CORS y Swagger
 ```
+
+Para crear un recurso nuevo copia `src/modules/_template`, renombra
+`Item`/`item` y registra el módulo en `AppModule`.
 
 El modelo de datos y sus decisiones están documentados en
 [docs/erd.md](docs/erd.md).
