@@ -59,6 +59,10 @@
   semiabiertos en SQL) para la fase de mantenimientos. Vitest 20/20; HTTP y
   regla de cruce (casos a-d del PDF) verificados contra PostgreSQL.
 
+- 2026-10-27: fase 5 en `feature/fleetcore-workshops`. CRUD de talleres
+  (ADMIN), `GET /workshops/active` y detalle también para TECHNICIAN,
+  activar/inactivar (409 con mantenimientos activos), `getActiveWorkshop`
+  para la fase de mantenimientos. Vitest 24/24 y HTTP verificado.
 - 2026-10-27: código simplificado a nivel junior por pedido del usuario:
   paginación solo `page`/`limit` (sin sortBy/order), sin `Paginated<T>` ni
   `@ApiPaginatedResponse`, repositorios llamados `xRepository`, nombres
@@ -91,8 +95,8 @@
 - Registro: TECHNICIAN abierto; ADMIN solo con Bearer de ADMIN.
 - Puertos locales: el `.env` de esta máquina usa `PORT=3001` y `DB_PORT=5434`
   (5432, 5433 y 3000 están ocupados por otros proyectos).
-- Requisitos del PDF aún sin implementar: CRUD de talleres y
-  mantenimientos con sus reglas (transiciones de
+- Requisitos del PDF aún sin implementar: mantenimientos con
+  sus reglas (transiciones de
   estado, kilometraje), seeder idempotente
   (`npm run seed`),
   README con datos del coder, credenciales de prueba y URL de Swagger.

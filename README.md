@@ -64,6 +64,18 @@ Un mecánico no está atado a un taller, pero no puede tener dos mantenimientos
 mantenimiento ocupa `[fechaProgramada, fechaProgramada + duración)`: uno de
 7:30 a 9:00 bloquea otro que empiece a las 8:00, pero no uno a las 9:00.
 
+## Talleres
+
+| Método | Ruta | Rol | Descripción |
+|---|---|---|---|
+| POST | `/workshops` | ADMIN | Registrar (nace `ACTIVE`) |
+| GET | `/workshops?page&limit&estado` | ADMIN | Listar todos (paginado) |
+| GET | `/workshops/active` | ADMIN, TECHNICIAN | Listar talleres activos |
+| GET | `/workshops/:id` | ADMIN, TECHNICIAN | Consultar uno |
+| PATCH | `/workshops/:id` | ADMIN | Actualizar |
+| PATCH | `/workshops/:id/deactivate` | ADMIN | Inactivar (409 si tiene mantenimientos activos) |
+| PATCH | `/workshops/:id/activate` | ADMIN | Activar |
+
 ## Estructura
 
 ```text
