@@ -52,6 +52,13 @@
 - 2026-10-27: retirado lo derivado del texto invisible del PDF: rol MANAGER y
   `statusCodeInWords` (util, interceptor, filtro, DTOs, Swagger, README).
 
+- 2026-10-27: fase 4 en `feature/fleetcore-mechanics`. CRUD de mecánicos
+  (solo ADMIN), correo único, vínculo opcional 1:1 con un usuario TECHNICIAN,
+  activar/inactivar (409 con mantenimientos activos). `MechanicsService`
+  exporta `findAssignable` y `assertScheduleAvailable` (intervalos
+  semiabiertos en SQL) para la fase de mantenimientos. Vitest 20/20; HTTP y
+  regla de cruce (casos a-d del PDF) verificados contra PostgreSQL.
+
 ## Convenciones que deben conservarse
 
 - Guards globales: `JwtAuthGuard` → `RolesGuard`; `@Public()` los salta.
@@ -75,8 +82,8 @@
 - Registro: TECHNICIAN abierto; ADMIN solo con Bearer de ADMIN.
 - Puertos locales: el `.env` de esta máquina usa `PORT=3001` y `DB_PORT=5434`
   (5432, 5433 y 3000 están ocupados por otros proyectos).
-- Requisitos del PDF aún sin implementar: CRUD de mecánicos,
-  talleres y mantenimientos con sus reglas (solapes de horario, transiciones de
+- Requisitos del PDF aún sin implementar: CRUD de talleres y
+  mantenimientos con sus reglas (transiciones de
   estado, kilometraje), seeder idempotente
   (`npm run seed`),
   README con datos del coder, credenciales de prueba y URL de Swagger.

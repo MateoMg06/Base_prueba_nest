@@ -1,3 +1,4 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   Column,
   Entity,
@@ -14,16 +15,20 @@ import { MechanicStatus } from '../enums/mechanic-status.enum.js';
 
 @Entity('mechanics')
 export class Mechanic extends BaseEntity {
+  @ApiProperty({ example: 'Carlos Pérez' })
   @Column({ length: 120 })
   nombre: string;
 
+  @ApiProperty({ example: 'carlos@fleetcore.com' })
   @Index({ unique: true })
   @Column({ length: 150 })
   correo: string;
 
+  @ApiProperty({ example: 'Motores diésel' })
   @Column({ length: 120 })
   especialidad: string;
 
+  @ApiProperty({ enum: MechanicStatus })
   @Column({
     type: 'simple-enum',
     enum: MechanicStatus,
@@ -31,6 +36,10 @@ export class Mechanic extends BaseEntity {
   })
   estado: MechanicStatus;
 
+  @ApiPropertyOptional({
+    description: 'Usuario TECHNICIAN vinculado (id, nombre, email, role)',
+    nullable: true,
+  })
   @OneToOne(() => User, (user) => user.mechanic, {
     nullable: true,
     onDelete: 'SET NULL',

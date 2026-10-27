@@ -46,6 +46,24 @@ Todas las operaciones son exclusivas del rol `ADMIN`.
 
 Los listados responden `data: { items, total, page, limit }`.
 
+## Mecánicos
+
+Todas las operaciones son exclusivas del rol `ADMIN`.
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| POST | `/mechanics` | Registrar (correo único, nace `ACTIVE`; `usuarioId` opcional de un TECHNICIAN) |
+| GET | `/mechanics?page&limit&sortBy&order&estado` | Listar paginado |
+| GET | `/mechanics/:id` | Consultar uno |
+| PATCH | `/mechanics/:id` | Actualizar |
+| PATCH | `/mechanics/:id/deactivate` | Inactivar (conserva historial; 409 si tiene mantenimientos activos) |
+| PATCH | `/mechanics/:id/activate` | Activar |
+
+Un mecánico no está atado a un taller, pero no puede tener dos mantenimientos
+`SCHEDULED`/`IN_PROGRESS` cuyos horarios se crucen en ningún taller. Cada
+mantenimiento ocupa `[fechaProgramada, fechaProgramada + duración)`: uno de
+7:30 a 9:00 bloquea otro que empiece a las 8:00, pero no uno a las 9:00.
+
 ## Estructura
 
 ```text
