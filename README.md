@@ -118,6 +118,22 @@ Importa `docs/FleetCore.postman_collection.json` en Postman. Ejecuta primero
 las variables `adminToken` y `techToken`. Ajusta `baseUrl` si usas otro
 puerto. Los ids de los ejemplos corresponden a los datos del seeder.
 
+## Evidencias
+
+Capturas de Swagger en [`evidence/`](evidence/):
+
+1. Login ADMIN: [petición](evidence/01-login-peticion.png) y
+   [respuesta 200 con el JWT](evidence/02-login-respuesta-200.png).
+2. [Authorize con Bearer y API Key](evidence/03-authorize-bearer-y-api-key.png).
+3. Crear vehículo: [petición](evidence/04-crear-vehiculo-peticion.png) y
+   [respuesta 201](evidence/05-crear-vehiculo-201.png).
+4. Listar vehículos: [parámetros](evidence/06-listar-vehiculos-parametros.png)
+   y [respuesta paginada 200](evidence/07-listar-vehiculos-200.png).
+5. Inactivar vehículo: [petición](evidence/08-inactivar-vehiculo.png) y
+   [ejemplo de respuesta](evidence/09-inactivar-vehiculo-ejemplo-respuesta.png).
+6. Reactivar vehículo: [petición](evidence/10-reactivar-vehiculo.png) y
+   [respuesta 200](evidence/11-reactivar-vehiculo-200.png).
+
 ## Respuestas
 
 - Éxito: `{ success: true, statusCode, data, timestamp }`.

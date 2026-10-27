@@ -145,8 +145,10 @@
 - 2026-10-27: `main` integrado por fast-forward desde
   `feature/fleetcore-docs` (fases 1-11). Las ramas `auth` y `domain-model`
   conservan código antiguo del texto oculto: no volver a integrarlas.
-- Entrega pendiente del usuario: subir `database/fleetcore.sql` a Moodle y
-  evidencias (repo ya público).
+- 2026-10-27: capturas de Swagger del usuario en `evidence/` (11, renombradas
+  con prefijo numérico) y enlazadas en README. Solo muestran JWT locales de
+  prueba, sin secretos.
+- Entrega pendiente del usuario: subir `database/fleetcore.sql` a Moodle.
 - Docker Desktop debe estar en ejecución antes de `docker compose up`.
 - Con la API en contenedor, `npm run start:dev` choca con el mismo puerto:
   detener `api` (`docker compose stop api`) antes de correrla local.
