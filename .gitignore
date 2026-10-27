@@ -1,0 +1,27 @@
+# dependencias y build
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# entorno (se versiona solo .env.example)
+.env
+.env.*
+!.env.example
+
+# base de datos local
+data/
+*.sqlite
+*.sqlite-journal
+
+# logs / sistema / IDE
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# enunciado de la prueba (no se versiona)
+*.pdf
