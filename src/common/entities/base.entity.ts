@@ -15,10 +15,10 @@ export abstract class BaseEntity {
   id: number;
 
   @ApiProperty()
-  @CreateDateColumn({ name: 'creada_en' })
+  @CreateDateColumn({ name: 'creada_en', type: 'timestamptz' })
   creadaEn: Date;
 
   @ApiProperty()
-  @UpdateDateColumn({ name: 'actualizada_en' })
+  @UpdateDateColumn({ name: 'actualizada_en', type: 'timestamptz' })
   actualizadaEn: Date;
 }

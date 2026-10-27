@@ -27,7 +27,7 @@ export class Maintenance extends BaseEntity {
   kilometrajeRegistrado: number;
 
   @Index()
-  @Column({ name: 'fecha_programada' })
+  @Column({ name: 'fecha_programada', type: 'timestamptz' })
   fechaProgramada: Date;
 
   @Column({ type: 'int', name: 'duracion_estimada_minutos' })
@@ -52,7 +52,7 @@ export class Maintenance extends BaseEntity {
   })
   costoFinal?: string;
 
-  @Column({ name: 'fecha_finalizacion', nullable: true })
+  @Column({ name: 'fecha_finalizacion', type: 'timestamptz', nullable: true })
   fechaFinalizacion?: Date;
 
   @Column({ type: 'int', name: 'kilometraje_final', nullable: true })

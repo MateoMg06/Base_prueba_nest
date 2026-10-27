@@ -21,12 +21,12 @@ export class ItemService {
 
   async findAll(query: PaginationQueryDto) {
     const sortBy = SORTABLE_COLUMNS.find((c) => c === query.sortBy) ?? 'id';
-    const [data, total] = await this.items.findAndCount({
+    const [items, total] = await this.items.findAndCount({
       order: { [sortBy]: query.order },
       skip: query.skip,
       take: query.limit,
     });
-    return { data, total, page: query.page, limit: query.limit };
+    return { items, total, page: query.page, limit: query.limit };
   }
 
   async findOne(id: number): Promise<Item> {

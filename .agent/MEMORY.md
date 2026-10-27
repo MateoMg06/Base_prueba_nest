@@ -39,6 +39,13 @@
   Vitest 10/10, tsc y lint OK; probado contra PostgreSQL: register, 409,
   403 de rol, 400, login, 401 (sin token, inválido, expirado), x-api-key y 404.
 
+- 2026-10-27: fase 3 en `feature/fleetcore-vehicles`. CRUD de vehículos
+  (escritura ADMIN, lectura ADMIN/MANAGER), consulta por placa, inactivación
+  lógica con bloqueo si hay mantenimientos SCHEDULED/IN_PROGRESS, reactivación,
+  kilometraje no decreciente. `Paginated<T>` + `@ApiPaginatedResponse`.
+  Fechas pasan a `timestamptz` (antes se desfasaban 5 h). Vitest 15/15 y
+  pruebas HTTP contra PostgreSQL OK (incluido 403 por rol).
+
 ## Convenciones que deben conservarse
 
 - Guards globales: `JwtAuthGuard` → `RolesGuard`; `@Public()` los salta.
@@ -47,6 +54,10 @@
 - Los DTOs se validan globalmente y las respuestas/errores tienen formatos
   estandarizados por `ResponseInterceptor` y `HttpExceptionFilter`.
 - `npm run check` reúne lint, TypeScript y pruebas.
+- Listados paginados devuelven `Paginated<T>` (`items,total,page,limit`) y se
+  documentan con `@ApiPaginatedResponse`. El estado de las entidades nunca
+  llega en los DTO de creación/edición; cambia por endpoints dedicados.
+- Fechas en columnas `timestamptz`.
 - `.env` y artefactos generados son locales y no se versionan.
 - `docker compose up -d db` inicia PostgreSQL con las credenciales ficticias de
   `.env.example`.
@@ -58,7 +69,7 @@
 - Registro: TECHNICIAN abierto; ADMIN/MANAGER solo con Bearer de ADMIN.
 - Puertos locales: el `.env` de esta máquina usa `PORT=3001` y `DB_PORT=5434`
   (5432, 5433 y 3000 están ocupados por otros proyectos).
-- Requisitos del PDF aún sin implementar: CRUD de vehículos, mecánicos,
+- Requisitos del PDF aún sin implementar: CRUD de mecánicos,
   talleres y mantenimientos con sus reglas (solapes de horario, transiciones de
   estado, kilometraje), seeder idempotente
   (`npm run seed`),

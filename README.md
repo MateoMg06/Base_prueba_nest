@@ -34,6 +34,21 @@ PostgreSQL.
 Toda respuesta incluye `statusCodeInWords` (p. ej. `404` → `"cuatro cero
 cuatro"`).
 
+## Vehículos
+
+Escritura solo `ADMIN`; consulta `ADMIN` y `MANAGER`.
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| POST | `/vehicles` | Registrar (placa única, nace `AVAILABLE`) |
+| GET | `/vehicles?page&limit&sortBy&order&estado` | Listar paginado |
+| GET | `/vehicles/:id` · `/vehicles/plate/:placa` | Consultar por id o placa |
+| PATCH | `/vehicles/:id` | Actualizar (el kilometraje no puede bajar) |
+| DELETE | `/vehicles/:id` | Inactivar (eliminación lógica; 409 si tiene mantenimientos activos) |
+| PATCH | `/vehicles/:id/activate` | Reactivar un vehículo `INACTIVE` |
+
+Los listados responden `data: { items, total, page, limit }`.
+
 ## Estructura
 
 ```text
