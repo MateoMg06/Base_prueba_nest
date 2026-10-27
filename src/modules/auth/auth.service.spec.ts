@@ -1,7 +1,7 @@
 import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import * as argon2 from 'argon2';
+import * as bcrypt from 'bcrypt';
 import { Role } from '../../common/enums/role.enum.js';
 import { User } from '../users/entities/user.entity.js';
 import { UsersService } from '../users/users.service.js';
@@ -30,7 +30,7 @@ describe('AuthService', () => {
     );
   });
 
-  it('registra TECHNICIAN por defecto y guarda la contraseña con argon2', async () => {
+  it('registra TECHNICIAN por defecto y guarda la contraseña con bcrypt', async () => {
     const user = await service.register({
       nombre: 'Ana',
       email: 'ana@fleetcore.com',
@@ -44,8 +44,10 @@ describe('AuthService', () => {
       email: 'ana@fleetcore.com',
       role: Role.TECHNICIAN,
     });
-    expect(passwordHash).toMatch(/^\$argon2id\$/);
-    await expect(argon2.verify(passwordHash, 'Secreta123')).resolves.toBe(true);
+    expect(passwordHash).toMatch(/^\$2b\$12\$/);
+    await expect(bcrypt.compare('Secreta123', passwordHash)).resolves.toBe(
+      true,
+    );
   });
 
   it('impide que alguien sin rol ADMIN registre un ADMIN', async () => {
@@ -67,7 +69,7 @@ describe('AuthService', () => {
       nombre: 'Admin',
       email: 'admin@fleetcore.com',
       role: Role.ADMIN,
-      passwordHash: await argon2.hash('Admin123*'),
+      passwordHash: await bcrypt.hash('Admin123*', 4),
     });
 
     const result = await service.login({

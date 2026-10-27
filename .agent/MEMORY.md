@@ -31,7 +31,7 @@
   `npm run check` OK (lint, tsc, 5 pruebas).
 
 - 2026-10-27: fase 2 en `feature/fleetcore-auth`. `AuthModule` (register,
-  login, me; argon2id; `JwtModule` global con `JWT_SECRET`/`JWT_EXPIRES_IN`),
+  login, me; bcrypt; `JwtModule` global con `JWT_SECRET`/`JWT_EXPIRES_IN`),
   `UsersService` con repositorio, `JwtAuthGuard` real (token opcional en rutas
   públicas), `@ApiKeyAuth()` + `IntegrationsModule`
   (`GET /integrations/fleet-status`), `statusCodeInWords` en interceptor y
@@ -45,6 +45,9 @@
   kilometraje no decreciente. `Paginated<T>` + `@ApiPaginatedResponse`.
   Fechas pasan a `timestamptz` (antes se desfasaban 5 h). Vitest 15/15 y
   pruebas HTTP contra PostgreSQL OK (incluido 403 por rol).
+- 2026-10-27: por decisión explícita del usuario las contraseñas usan bcrypt
+  (12 rondas, máx. 72 bytes) en lugar de argon2, aunque el PDF (req. 1.3)
+  pide argon2. Probado: register, login, 401 y 400 por >72 bytes.
 
 ## Convenciones que deben conservarse
 
