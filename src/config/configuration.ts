@@ -18,11 +18,13 @@ const configuration = () => ({
   apiKeys: parseList(process.env.API_KEYS),
   swaggerPath: process.env.SWAGGER_PATH ?? 'docs',
   database: {
-    type: process.env.DB_TYPE ?? 'better-sqlite3',
-    database: process.env.DB_DATABASE ?? 'data/database.sqlite',
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : undefined,
-    username: process.env.DB_USERNAME,
+    // PostgreSQL es el motor de desarrollo y producción del proyecto.
+    // Los tests e2e conservan SQLite en memoria mediante sus variables aisladas.
+    type: process.env.DB_TYPE ?? 'postgres',
+    database: process.env.DB_DATABASE ?? 'fleetcore',
+    host: process.env.DB_HOST ?? 'localhost',
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
+    username: process.env.DB_USERNAME ?? 'fleetcore',
     password: process.env.DB_PASSWORD,
     synchronize: toBool(process.env.DB_SYNCHRONIZE, true),
     logging: toBool(process.env.DB_LOGGING, false),

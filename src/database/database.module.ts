@@ -6,9 +6,8 @@ import { dirname } from 'node:path';
 import { AppConfig } from '../config/configuration.js';
 
 /**
- * Conexión TypeORM. Por defecto SQLite (better-sqlite3).
- * Para cambiar de motor basta con el .env (DB_TYPE=postgres|mysql + host/puerto/credenciales)
- * e instalar el driver (`npm i pg` o `npm i mysql2`). Ver README › "Cambiar de base de datos".
+ * Conexión TypeORM. PostgreSQL es el motor de desarrollo y producción.
+ * SQLite se conserva como alternativa en memoria para las pruebas e2e aisladas.
  *
  * autoLoadEntities: toda entidad registrada con TypeOrmModule.forFeature([...]) en
  * cualquier módulo se carga sola; no hay que listar rutas ni globs.

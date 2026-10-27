@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: fleetcore-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-fleetcore}
+      POSTGRES_USER: ${DB_USERNAME:-fleetcore}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-fleetcore_dev_password}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - fleetcore_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${DB_USERNAME:-fleetcore} -d ${DB_DATABASE:-fleetcore}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  fleetcore_postgres_data:
