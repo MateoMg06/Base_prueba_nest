@@ -142,8 +142,11 @@
 - Registro: TECHNICIAN abierto; ADMIN solo con Bearer de ADMIN.
 - Puertos locales: el `.env` de esta máquina usa `PORT=3001` y `DB_PORT=5434`
   (5432, 5433 y 3000 están ocupados por otros proyectos).
-- Entrega: integrar en `main` desde la última rama (`auth` y `domain-model`
-  aún tienen lo del texto oculto), repo público, subir el `.sql` a Moodle.
+- 2026-10-27: `main` integrado por fast-forward desde
+  `feature/fleetcore-docs` (fases 1-11). Las ramas `auth` y `domain-model`
+  conservan código antiguo del texto oculto: no volver a integrarlas.
+- Entrega pendiente del usuario: subir `database/fleetcore.sql` a Moodle y
+  evidencias (repo ya público).
 - Docker Desktop debe estar en ejecución antes de `docker compose up`.
 - Con la API en contenedor, `npm run start:dev` choca con el mismo puerto:
   detener `api` (`docker compose stop api`) antes de correrla local.
