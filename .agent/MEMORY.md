@@ -105,7 +105,8 @@
   `GET /auth/github/callback` cambia el code por token, toma el correo
   principal verificado, busca o crea el usuario (TECHNICIAN) y devuelve
   `createToken`. Variables `GITHUB_*` opcionales (sin ellas 503). 57/57
-  pruebas; 302, 401 (state falso) y 400 verificados en el contenedor.
+  pruebas; 302, 401 (state falso) y 400 verificados en el contenedor; flujo
+  real con la cuenta del usuario OK (usuario TECHNICIAN creado).
 
 ## Convenciones que deben conservarse
 
