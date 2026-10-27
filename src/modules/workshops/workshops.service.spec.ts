@@ -6,20 +6,20 @@ import { WorkshopStatus } from './enums/workshop-status.enum.js';
 import { WorkshopsService } from './workshops.service.js';
 
 describe('WorkshopsService', () => {
-  let workshopRepository: Record<string, ReturnType<typeof vi.fn>>;
-  let maintenanceRepository: { countBy: ReturnType<typeof vi.fn> };
+  let workshopRepository: Record<string, jest.Mock>;
+  let maintenanceRepository: { countBy: jest.Mock };
   let service: WorkshopsService;
 
   beforeEach(() => {
     workshopRepository = {
-      findOneBy: vi.fn().mockResolvedValue({
+      findOneBy: jest.fn().mockResolvedValue({
         id: 1,
         nombre: 'Taller Central',
         estado: WorkshopStatus.ACTIVE,
       }),
-      save: vi.fn((workshop: Workshop) => Promise.resolve(workshop)),
+      save: jest.fn((workshop: Workshop) => Promise.resolve(workshop)),
     };
-    maintenanceRepository = { countBy: vi.fn().mockResolvedValue(0) };
+    maintenanceRepository = { countBy: jest.fn().mockResolvedValue(0) };
     service = new WorkshopsService(
       workshopRepository as unknown as Repository<Workshop>,
       maintenanceRepository as unknown as Repository<Maintenance>,

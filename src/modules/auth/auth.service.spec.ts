@@ -11,17 +11,17 @@ describe('AuthService', () => {
   const jwtService = new JwtService({ secret: 'x'.repeat(32) });
   const config = { get: () => 3600 } as unknown as ConfigService;
   let users: {
-    create: ReturnType<typeof vi.fn>;
-    findByEmail: ReturnType<typeof vi.fn>;
+    create: jest.Mock;
+    findByEmail: jest.Mock;
   };
   let service: AuthService;
 
   beforeEach(() => {
     users = {
-      create: vi.fn((data: Partial<User>) =>
+      create: jest.fn((data: Partial<User>) =>
         Promise.resolve({ id: 7, ...data } as User),
       ),
-      findByEmail: vi.fn(),
+      findByEmail: jest.fn(),
     };
     service = new AuthService(
       users as unknown as UsersService,

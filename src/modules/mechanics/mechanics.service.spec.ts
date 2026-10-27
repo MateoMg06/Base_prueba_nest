@@ -23,30 +23,33 @@ const mechanic = (overrides: Partial<Mechanic> = {}) =>
   }) as Mechanic;
 
 describe('MechanicsService', () => {
-  let mechanics: Record<string, ReturnType<typeof vi.fn>>;
-  let maintenances: Record<string, ReturnType<typeof vi.fn>>;
-  let users: { findOneBy: ReturnType<typeof vi.fn> };
-  let queryBuilder: Record<string, ReturnType<typeof vi.fn>>;
+  let mechanics: Record<string, jest.Mock>;
+  let maintenances: Record<string, jest.Mock>;
+  let users: { findOneBy: jest.Mock };
+  let queryBuilder: Record<string, jest.Mock>;
   let service: MechanicsService;
 
   beforeEach(() => {
     mechanics = {
-      existsBy: vi.fn().mockResolvedValue(false),
-      findOne: vi.fn().mockResolvedValue(mechanic()),
-      create: vi.fn((dto: Partial<Mechanic>) => ({ ...dto })),
-      merge: vi.fn((m: Mechanic, dto: Partial<Mechanic>) => ({ ...m, ...dto })),
-      save: vi.fn((m: Mechanic) => Promise.resolve({ ...m, id: 1 })),
+      existsBy: jest.fn().mockResolvedValue(false),
+      findOne: jest.fn().mockResolvedValue(mechanic()),
+      create: jest.fn((dto: Partial<Mechanic>) => ({ ...dto })),
+      merge: jest.fn((m: Mechanic, dto: Partial<Mechanic>) => ({
+        ...m,
+        ...dto,
+      })),
+      save: jest.fn((m: Mechanic) => Promise.resolve({ ...m, id: 1 })),
     };
     queryBuilder = {
-      where: vi.fn().mockReturnThis(),
-      andWhere: vi.fn().mockReturnThis(),
-      getOne: vi.fn().mockResolvedValue(null),
+      where: jest.fn().mockReturnThis(),
+      andWhere: jest.fn().mockReturnThis(),
+      getOne: jest.fn().mockResolvedValue(null),
     };
     maintenances = {
-      countBy: vi.fn().mockResolvedValue(0),
-      createQueryBuilder: vi.fn(() => queryBuilder),
+      countBy: jest.fn().mockResolvedValue(0),
+      createQueryBuilder: jest.fn(() => queryBuilder),
     };
-    users = { findOneBy: vi.fn() };
+    users = { findOneBy: jest.fn() };
     service = new MechanicsService(
       mechanics as unknown as Repository<Mechanic>,
       maintenances as unknown as Repository<Maintenance>,

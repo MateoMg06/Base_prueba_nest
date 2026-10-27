@@ -146,6 +146,22 @@ COMPLETED y CANCELLED son finales
 
 Crear y cambiar de estado se hacen en transacciones con bloqueo de filas.
 
+## Pruebas (Jest)
+
+```bash
+npm test          # pruebas unitarias
+npm run test:cov  # con reporte de cobertura (carpeta coverage/)
+npm run check     # lint + TypeScript + pruebas
+```
+
+- Jest corre en modo ESM (NestJS 12 solo se publica como ESM) con `ts-jest`;
+  la configuración está en `jest.config.js`.
+- Pruebas clave: transiciones de estado de mantenimientos, cruce de horarios
+  de mecánicos, kilometraje no decreciente, inactivaciones con mantenimientos
+  activos, registro/login, guards JWT, roles y API Key, interceptor y filtro.
+- La cobertura mínima exigida es 40% (`coverageThreshold`); actualmente
+  ronda 59% de líneas.
+
 ## Estructura
 
 ```text

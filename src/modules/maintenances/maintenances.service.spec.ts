@@ -30,18 +30,18 @@ const buildMaintenance = (estado: MaintenanceStatus) => ({
 });
 
 describe('MaintenancesService', () => {
-  let manager: Record<string, ReturnType<typeof vi.fn>>;
-  let mechanicsService: Record<string, ReturnType<typeof vi.fn>>;
+  let manager: Record<string, jest.Mock>;
+  let mechanicsService: Record<string, jest.Mock>;
   let service: MaintenancesService;
   let current: ReturnType<typeof buildMaintenance>;
 
   beforeEach(() => {
     current = buildMaintenance(MaintenanceStatus.SCHEDULED);
     manager = {
-      findOne: vi.fn(() => Promise.resolve(current)),
-      countBy: vi.fn().mockResolvedValue(0),
-      create: vi.fn((_entity: unknown, data: object) => data),
-      save: vi.fn((_entity: unknown, data?: object) =>
+      findOne: jest.fn(() => Promise.resolve(current)),
+      countBy: jest.fn().mockResolvedValue(0),
+      create: jest.fn((_entity: unknown, data: object) => data),
+      save: jest.fn((_entity: unknown, data?: object) =>
         Promise.resolve({ id: 10, ...(data ?? (_entity as object)) }),
       ),
     };
@@ -50,14 +50,14 @@ describe('MaintenancesService', () => {
         work(manager),
     };
     mechanicsService = {
-      getActiveMechanic: vi.fn().mockResolvedValue({ id: 3 }),
-      checkSchedule: vi.fn().mockResolvedValue(undefined),
+      getActiveMechanic: jest.fn().mockResolvedValue({ id: 3 }),
+      checkSchedule: jest.fn().mockResolvedValue(undefined),
     };
     const workshopsService = {
-      getActiveWorkshop: vi.fn().mockResolvedValue({ id: 4 }),
+      getActiveWorkshop: jest.fn().mockResolvedValue({ id: 4 }),
     };
     const maintenanceRepository = {
-      findOne: vi.fn(() => Promise.resolve(current)),
+      findOne: jest.fn(() => Promise.resolve(current)),
     };
     service = new MaintenancesService(
       maintenanceRepository as unknown as Repository<Maintenance>,

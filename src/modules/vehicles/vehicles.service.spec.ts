@@ -22,19 +22,19 @@ const vehicle = (overrides: Partial<Vehicle> = {}) =>
   }) as Vehicle;
 
 describe('VehiclesService', () => {
-  let vehicles: Record<string, ReturnType<typeof vi.fn>>;
-  let maintenances: { countBy: ReturnType<typeof vi.fn> };
+  let vehicles: Record<string, jest.Mock>;
+  let maintenances: { countBy: jest.Mock };
   let service: VehiclesService;
 
   beforeEach(() => {
     vehicles = {
-      existsBy: vi.fn().mockResolvedValue(false),
-      findOneBy: vi.fn().mockResolvedValue(vehicle()),
-      create: vi.fn((dto: Partial<Vehicle>) => dto),
-      merge: vi.fn((v: Vehicle, dto: Partial<Vehicle>) => ({ ...v, ...dto })),
-      save: vi.fn((v: Vehicle) => Promise.resolve(v)),
+      existsBy: jest.fn().mockResolvedValue(false),
+      findOneBy: jest.fn().mockResolvedValue(vehicle()),
+      create: jest.fn((dto: Partial<Vehicle>) => dto),
+      merge: jest.fn((v: Vehicle, dto: Partial<Vehicle>) => ({ ...v, ...dto })),
+      save: jest.fn((v: Vehicle) => Promise.resolve(v)),
     };
-    maintenances = { countBy: vi.fn().mockResolvedValue(0) };
+    maintenances = { countBy: jest.fn().mockResolvedValue(0) };
     service = new VehiclesService(
       vehicles as unknown as Repository<Vehicle>,
       maintenances as unknown as Repository<Maintenance>,

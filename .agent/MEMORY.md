@@ -4,7 +4,7 @@
 
 - **Actualizada:** 2026-10-27.
 - **Stack:** NestJS 12, TypeORM y PostgreSQL (único motor; SQLite eliminado).
-  Pruebas con Vitest.
+  Pruebas con Jest (modo ESM).
 - **Dominio:** FleetCore, gestión de mantenimiento de flotas. Cada recurso vive
   en `src/modules/<recurso>`; `src/modules/_template` es el molde CRUD (no
   registrado).
@@ -90,6 +90,14 @@
   `DB_HOST=db`, espera a `db` healthy, red `fleetcore_network`, volumen
   `fleetcore_postgres_data`). Verificado: build, Swagger 200, seed dentro del
   contenedor y login OK con datos persistidos.
+
+- 2026-10-27: fase 9 en `feature/fleetcore-tests`. Vitest → Jest 30 +
+  ts-jest en modo ESM (`node --experimental-vm-modules`, NestJS 12 es solo
+  ESM). `jest.config.js` mapea imports `.js` → `.ts`; `test/jest.setup.ts`
+  expone `jest` global (en ESM no existe); mocks tipados con `jest.Mock`.
+  Nuevas pruebas: guards JWT/roles, interceptor, filtro, integrations y
+  users. 51/51 pruebas; cobertura ~59% líneas, 50% ramas, 44% funciones
+  (umbral 40%; el usuario pidió no pasar de 80%). `npm run check` OK.
 
 ## Convenciones que deben conservarse
 

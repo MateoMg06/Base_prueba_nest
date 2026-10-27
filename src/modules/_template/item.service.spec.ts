@@ -6,12 +6,12 @@ import { Item } from './entities/item.entity.js';
 import { ItemService } from './item.service.js';
 
 const repositoryMock = () => ({
-  create: vi.fn((dto: Partial<Item>) => dto as Item),
-  save: vi.fn((item: Item) => Promise.resolve({ ...item, id: 1 })),
-  findAndCount: vi.fn(() => Promise.resolve([[], 0])),
-  findOneBy: vi.fn(() => Promise.resolve(null)),
-  merge: vi.fn((item: Item, dto: Partial<Item>) => ({ ...item, ...dto })),
-  remove: vi.fn(),
+  create: jest.fn((dto: Partial<Item>) => dto as Item),
+  save: jest.fn((item: Item) => Promise.resolve({ ...item, id: 1 })),
+  findAndCount: jest.fn(() => Promise.resolve([[], 0])),
+  findOneBy: jest.fn(() => Promise.resolve(null)),
+  merge: jest.fn((item: Item, dto: Partial<Item>) => ({ ...item, ...dto })),
+  remove: jest.fn(),
 });
 
 describe('ItemService', () => {
