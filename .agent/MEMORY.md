@@ -36,7 +36,8 @@
   públicas), `@ApiKeyAuth()` + `IntegrationsModule`
   (`GET /integrations/fleet-status`), `statusCodeInWords` en interceptor y
   filtro. Relaciones de entidades tipadas con `Relation<T>` (ESM circular).
-  Vitest 10/10, tsc y lint OK.
+  Vitest 10/10, tsc y lint OK; probado contra PostgreSQL: register, 409,
+  403 de rol, 400, login, 401 (sin token, inválido, expirado), x-api-key y 404.
 
 ## Convenciones que deben conservarse
 
