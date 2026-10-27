@@ -108,6 +108,15 @@
   pruebas; 302, 401 (state falso) y 400 verificados en el contenedor; flujo
   real con la cuenta del usuario OK (usuario TECHNICIAN creado).
 
+- 2026-10-27: fase 11 en `feature/fleetcore-docs`. README final (coder Mateo
+  Mercado, clan Node-Nest; instalación Docker/local, tabla de variables,
+  seeder, Swagger, SQL, Postman). `database/fleetcore.sql`: volcado de una
+  base temporal solo con el seeder (sin usuarios de pruebas ni GitHub), sin
+  líneas `\restrict` para psql antiguos; restauración verificada.
+  `docs/FleetCore.postman_collection.json`: 39 peticiones, logins guardan
+  `adminToken`/`techToken`; corrida completa contra el SQL restaurado: 38/38
+  OK (GitHub se prueba en navegador).
+
 ## Convenciones que deben conservarse
 
 - Código simple, nivel junior: sin abstracciones ni helpers extra, nombres
@@ -133,7 +142,8 @@
 - Registro: TECHNICIAN abierto; ADMIN solo con Bearer de ADMIN.
 - Puertos locales: el `.env` de esta máquina usa `PORT=3001` y `DB_PORT=5434`
   (5432, 5433 y 3000 están ocupados por otros proyectos).
-- Requisitos del PDF aún sin implementar: README con datos del coder, credenciales de prueba y URL de Swagger.
+- Entrega: integrar en `main` desde la última rama (`auth` y `domain-model`
+  aún tienen lo del texto oculto), repo público, subir el `.sql` a Moodle.
 - Docker Desktop debe estar en ejecución antes de `docker compose up`.
 - Con la API en contenedor, `npm run start:dev` choca con el mismo puerto:
   detener `api` (`docker compose stop api`) antes de correrla local.
