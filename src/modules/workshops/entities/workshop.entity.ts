@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, type Relation } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity.js';
 import { Maintenance } from '../../maintenances/entities/maintenance.entity.js';
 import { WorkshopStatus } from '../enums/workshop-status.enum.js';
@@ -19,5 +19,5 @@ export class Workshop extends BaseEntity {
   estado: WorkshopStatus;
 
   @OneToMany(() => Maintenance, (maintenance) => maintenance.taller)
-  maintenances: Maintenance[];
+  maintenances: Relation<Maintenance[]>;
 }

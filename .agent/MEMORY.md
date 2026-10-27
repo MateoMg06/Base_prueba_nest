@@ -30,6 +30,14 @@
   (`better-sqlite3`, `DB_TYPE`, e2e, `db:reset`) y `dist/` obsoleto.
   `npm run check` OK (lint, tsc, 5 pruebas).
 
+- 2026-10-27: fase 2 en `feature/fleetcore-auth`. `AuthModule` (register,
+  login, me; argon2id; `JwtModule` global con `JWT_SECRET`/`JWT_EXPIRES_IN`),
+  `UsersService` con repositorio, `JwtAuthGuard` real (token opcional en rutas
+  públicas), `@ApiKeyAuth()` + `IntegrationsModule`
+  (`GET /integrations/fleet-status`), `statusCodeInWords` en interceptor y
+  filtro. Relaciones de entidades tipadas con `Relation<T>` (ESM circular).
+  Vitest 10/10, tsc y lint OK.
+
 ## Convenciones que deben conservarse
 
 - Guards globales: `JwtAuthGuard` → `RolesGuard`; `@Public()` los salta.
@@ -46,12 +54,12 @@
 
 ## Pendientes conocidos
 
-- `JwtAuthGuard` es un marcador que rechaza toda ruta privada (falla cerrado)
-  hasta implementar la fase de autenticación: registro/login por email,
-  Argon2, emisión y verificación de JWT, `request.user`.
+- Registro: TECHNICIAN abierto; ADMIN/MANAGER solo con Bearer de ADMIN.
+- Puertos locales: el `.env` de esta máquina usa `PORT=3001` y `DB_PORT=5434`
+  (5432, 5433 y 3000 están ocupados por otros proyectos).
 - Requisitos del PDF aún sin implementar: CRUD de vehículos, mecánicos,
   talleres y mantenimientos con sus reglas (solapes de horario, transiciones de
-  estado, kilometraje), endpoint con x-api-key, seeder idempotente
-  (`npm run seed`), código HTTP en palabras en la respuesta (requisito 1.6),
+  estado, kilometraje), seeder idempotente
+  (`npm run seed`),
   README con datos del coder, credenciales de prueba y URL de Swagger.
 - Docker Desktop debe estar en ejecución antes de `docker compose up -d db`.

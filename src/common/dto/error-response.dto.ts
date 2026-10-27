@@ -8,6 +8,9 @@ export class ErrorResponseDto {
   @ApiProperty({ example: 400 })
   statusCode: number;
 
+  @ApiProperty({ example: 'cuatro cero cero' })
+  statusCodeInWords: string;
+
   @ApiProperty({ example: 'Bad Request' })
   error: string;
 

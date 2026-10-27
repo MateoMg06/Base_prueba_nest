@@ -1,4 +1,11 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  type Relation,
+} from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity.js';
 import { Mechanic } from '../../mechanics/entities/mechanic.entity.js';
 import { Vehicle } from '../../vehicles/entities/vehicle.entity.js';
@@ -56,19 +63,19 @@ export class Maintenance extends BaseEntity {
     onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'vehicle_id' })
-  vehiculo: Vehicle;
+  vehiculo: Relation<Vehicle>;
 
   @ManyToOne(() => Mechanic, (mechanic) => mechanic.maintenances, {
     nullable: false,
     onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'mechanic_id' })
-  mecanico: Mechanic;
+  mecanico: Relation<Mechanic>;
 
   @ManyToOne(() => Workshop, (workshop) => workshop.maintenances, {
     nullable: false,
     onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'workshop_id' })
-  taller: Workshop;
+  taller: Relation<Workshop>;
 }

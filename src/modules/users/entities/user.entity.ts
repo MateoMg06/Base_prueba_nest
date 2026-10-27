@@ -1,4 +1,4 @@
-import { Column, Entity, Index, OneToOne } from 'typeorm';
+import { Column, Entity, Index, OneToOne, type Relation } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity.js';
 import { Mechanic } from '../../mechanics/entities/mechanic.entity.js';
 import { Role } from '../../../common/enums/role.enum.js';
@@ -23,5 +23,5 @@ export class User extends BaseEntity {
   role: Role;
 
   @OneToOne(() => Mechanic, (mechanic) => mechanic.usuario)
-  mechanic?: Mechanic;
+  mechanic?: Relation<Mechanic>;
 }

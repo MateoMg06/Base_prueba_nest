@@ -5,6 +5,7 @@ import {
   JoinColumn,
   OneToMany,
   OneToOne,
+  type Relation,
 } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity.js';
 import { Maintenance } from '../../maintenances/entities/maintenance.entity.js';
@@ -35,8 +36,8 @@ export class Mechanic extends BaseEntity {
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'user_id' })
-  usuario?: User | null;
+  usuario?: Relation<User> | null;
 
   @OneToMany(() => Maintenance, (maintenance) => maintenance.mecanico)
-  maintenances: Maintenance[];
+  maintenances: Relation<Maintenance[]>;
 }

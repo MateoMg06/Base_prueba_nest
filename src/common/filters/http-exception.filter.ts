@@ -9,10 +9,11 @@ import {
 import { Request, Response } from 'express';
 import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 import { ErrorResponseDto } from '../dto/error-response.dto.js';
+import { statusCodeToWords } from '../utils/status-code-words.util.js';
 
 /**
  * Normaliza TODOS los errores:
- * { success: false, statusCode, error, message, path, method, timestamp }
+ * { success: false, statusCode, statusCodeInWords, error, message, path, method, timestamp }
  *
  * - HttpException (400, 401, 403, 404, 409...) conserva su código real.
  * - Errores conocidos de TypeORM se traducen a 404/409 en vez de 500.
@@ -39,6 +40,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const body: ErrorResponseDto = {
       success: false,
       statusCode,
+      statusCodeInWords: statusCodeToWords(statusCode),
       error: (HttpStatus[statusCode] as string | undefined) ?? 'ERROR',
       message,
       path: request.url,

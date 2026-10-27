@@ -12,12 +12,15 @@ import {
   IsString,
   Max,
   Min,
+  MinLength,
   validateSync,
 } from 'class-validator';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter.js';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard.js';
 import { RolesGuard } from './common/guards/roles.guard.js';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor.js';
+import { AuthModule } from './modules/auth/auth.module.js';
+import { IntegrationsModule } from './modules/integrations/integrations.module.js';
 import { MaintenancesModule } from './modules/maintenances/maintenances.module.js';
 import { MechanicsModule } from './modules/mechanics/mechanics.module.js';
 import { UsersModule } from './modules/users/users.module.js';
@@ -45,6 +48,10 @@ const configuration = () => ({
   port: parseInt(process.env.PORT ?? '3000', 10),
   apiKeys: parseList(process.env.API_KEYS),
   swaggerPath: process.env.SWAGGER_PATH ?? 'docs',
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    expiresIn: parseInt(process.env.JWT_EXPIRES_IN ?? '3600', 10),
+  },
   database: {
     database: process.env.DB_DATABASE ?? 'fleetcore',
     host: process.env.DB_HOST ?? 'localhost',
@@ -111,6 +118,15 @@ class EnvironmentVariables {
   @IsOptional()
   @IsString()
   SWAGGER_PATH?: string;
+
+  @IsString()
+  @MinLength(32, { message: 'JWT_SECRET debe tener al menos 32 caracteres' })
+  JWT_SECRET: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(60)
+  JWT_EXPIRES_IN?: number;
 }
 
 function validateEnv(config: Record<string, unknown>) {
@@ -175,6 +191,8 @@ const typeOrmOptions = (config: ConfigService): TypeOrmModuleOptions => {
       useFactory: typeOrmOptions,
     }),
     UsersModule,
+    AuthModule,
+    IntegrationsModule,
     VehiclesModule,
     MechanicsModule,
     WorkshopsModule,

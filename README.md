@@ -19,6 +19,21 @@ npm run start:dev
 Consulta [la guía de desarrollo](docs/development.md) para comprobar y detener
 PostgreSQL.
 
+## Autenticación y autorización
+
+- `POST /auth/register` (público): crea usuarios `TECHNICIAN`. Para crear
+  `ADMIN` o `MANAGER` envía el `Bearer` de un ADMIN.
+- `POST /auth/login` (público): correo + contraseña → JWT (`JWT_EXPIRES_IN`
+  segundos). Las contraseñas se guardan con argon2id.
+- `GET /auth/me`: datos del token actual.
+- Todas las demás rutas exigen `Authorization: Bearer <token>`; los roles se
+  declaran con `@Roles(...)`.
+- `GET /integrations/fleet-status`: integración externa protegida solo con
+  `x-api-key` (una de `API_KEYS`).
+
+Toda respuesta incluye `statusCodeInWords` (p. ej. `404` → `"cuatro cero
+cuatro"`).
+
 ## Estructura
 
 ```text
