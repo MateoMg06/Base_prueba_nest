@@ -44,7 +44,7 @@
 - 2026-10-27: fase 3 en `feature/fleetcore-vehicles`. CRUD de vehículos
   (solo ADMIN), consulta por placa, inactivación
   lógica con bloqueo si hay mantenimientos SCHEDULED/IN_PROGRESS, reactivación,
-  kilometraje no decreciente. `Paginated<T>` + `@ApiPaginatedResponse`.
+  kilometraje no decreciente.
   Fechas pasan a `timestamptz` (antes se desfasaban 5 h). Vitest 15/15 y
   pruebas HTTP contra PostgreSQL OK (incluido 403 por rol).
 - 2026-10-27: contraseñas con bcrypt (12 rondas, máx. 72 bytes) por decisión
@@ -55,11 +55,21 @@
 - 2026-10-27: fase 4 en `feature/fleetcore-mechanics`. CRUD de mecánicos
   (solo ADMIN), correo único, vínculo opcional 1:1 con un usuario TECHNICIAN,
   activar/inactivar (409 con mantenimientos activos). `MechanicsService`
-  exporta `findAssignable` y `assertScheduleAvailable` (intervalos
+  exporta `getActiveMechanic` y `checkSchedule` (intervalos
   semiabiertos en SQL) para la fase de mantenimientos. Vitest 20/20; HTTP y
   regla de cruce (casos a-d del PDF) verificados contra PostgreSQL.
 
+- 2026-10-27: código simplificado a nivel junior por pedido del usuario:
+  paginación solo `page`/`limit` (sin sortBy/order), sin `Paginated<T>` ni
+  `@ApiPaginatedResponse`, repositorios llamados `xRepository`, nombres
+  simples (`checkPlate`, `checkEmail`, `getActiveMechanic`, `checkSchedule`,
+  `createToken`), comentarios cortos. TypeORM 1.x falla con `undefined` en
+  `where`: filtrar con `query.estado ? { estado } : {}`.
+
 ## Convenciones que deben conservarse
+
+- Código simple, nivel junior: sin abstracciones ni helpers extra, nombres
+  claros y cortos, comentarios breves solo donde aportan.
 
 - Guards globales: `JwtAuthGuard` → `RolesGuard`; `@Public()` los salta.
   `ApiKeyGuard` NO es global: usar `@Public() @UseGuards(ApiKeyGuard)` solo en
@@ -67,8 +77,7 @@
 - Los DTOs se validan globalmente y las respuestas/errores tienen formatos
   estandarizados por `ResponseInterceptor` y `HttpExceptionFilter`.
 - `npm run check` reúne lint, TypeScript y pruebas.
-- Listados paginados devuelven `Paginated<T>` (`items,total,page,limit`) y se
-  documentan con `@ApiPaginatedResponse`. El estado de las entidades nunca
+- Listados paginados devuelven `{ items, total, page, limit }`. El estado de las entidades nunca
   llega en los DTO de creación/edición; cambia por endpoints dedicados.
 - Fechas en columnas `timestamptz`.
 - `.env` y artefactos generados son locales y no se versionan.

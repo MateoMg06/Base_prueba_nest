@@ -14,11 +14,11 @@ import {
   ApiBearerAuth,
   ApiConflictResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { ApiCommonErrors } from '../../common/decorators/api-error-responses.decorator.js';
-import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator.js';
 import { ApiWrappedResponse } from '../../common/decorators/api-wrapped-response.decorator.js';
 import { Roles } from '../../common/decorators/roles.decorator.js';
 import { ErrorResponseDto } from '../../common/dto/error-response.dto.js';
@@ -51,7 +51,9 @@ export class VehiclesController {
 
   @Get()
   @ApiOperation({ summary: 'Listar vehículos (paginado, filtro por estado)' })
-  @ApiPaginatedResponse(Vehicle)
+  @ApiOkResponse({
+    description: 'Lista paginada: { items, total, page, limit }',
+  })
   findAll(@Query() query: VehicleQueryDto) {
     return this.vehiclesService.findAll(query);
   }

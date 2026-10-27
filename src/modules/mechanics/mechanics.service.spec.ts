@@ -82,7 +82,9 @@ describe('MechanicsService', () => {
     mechanics.findOne.mockResolvedValue(
       mechanic({ estado: MechanicStatus.INACTIVE }),
     );
-    await expect(service.findAssignable(1)).rejects.toThrow(ConflictException);
+    await expect(service.getActiveMechanic(1)).rejects.toThrow(
+      ConflictException,
+    );
   });
 
   it('responde 404 si el mecánico no existe', async () => {
@@ -92,16 +94,14 @@ describe('MechanicsService', () => {
 
   it('consulta el cruce con intervalo [inicio, fin) y rechaza si existe', async () => {
     const start = new Date('2026-11-02T07:30:00-05:00');
-    await expect(
-      service.assertScheduleAvailable(1, start, 90),
-    ).resolves.toBeUndefined();
+    await expect(service.checkSchedule(1, start, 90)).resolves.toBeUndefined();
     expect(queryBuilder.andWhere).toHaveBeenCalledWith(
-      'maintenance.fechaProgramada < :end',
+      'm.fechaProgramada < :end',
       { end: new Date('2026-11-02T09:00:00-05:00') },
     );
 
     queryBuilder.getOne.mockResolvedValue({ id: 3, fechaProgramada: start });
-    await expect(service.assertScheduleAvailable(1, start, 90)).rejects.toThrow(
+    await expect(service.checkSchedule(1, start, 90)).rejects.toThrow(
       ConflictException,
     );
   });

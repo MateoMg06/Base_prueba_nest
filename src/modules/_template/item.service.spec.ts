@@ -30,11 +30,10 @@ describe('ItemService', () => {
     });
   });
 
-  it('pagina y ordena solo por columnas permitidas', async () => {
+  it('pagina con page y limit', async () => {
     const query = plainToInstance(PaginationQueryDto, {
       page: '2',
       limit: '5',
-      sortBy: 'password',
     });
     await service.findAll(query);
     expect(repo.findAndCount).toHaveBeenCalledWith({

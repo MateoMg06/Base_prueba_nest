@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { Paginated } from '../../common/interfaces/paginated.interface.js';
 import { Maintenance } from '../maintenances/entities/maintenance.entity.js';
 import { MaintenanceStatus } from '../maintenances/enums/maintenance-status.enum.js';
 import { CreateVehicleDto } from './dto/create-vehicle.dto.js';
@@ -15,47 +14,41 @@ import { VehicleQueryDto } from './dto/vehicle-query.dto.js';
 import { Vehicle } from './entities/vehicle.entity.js';
 import { VehicleStatus } from './enums/vehicle-status.enum.js';
 
-const SORTABLE_COLUMNS = [
-  'id',
-  'placa',
-  'marca',
-  'anio',
-  'kilometraje',
-] as const;
-
 @Injectable()
 export class VehiclesService {
   constructor(
-    @InjectRepository(Vehicle) private readonly vehicles: Repository<Vehicle>,
+    @InjectRepository(Vehicle)
+    private readonly vehicleRepository: Repository<Vehicle>,
     @InjectRepository(Maintenance)
-    private readonly maintenances: Repository<Maintenance>,
+    private readonly maintenanceRepository: Repository<Maintenance>,
   ) {}
 
-  async create(dto: CreateVehicleDto): Promise<Vehicle> {
-    await this.assertPlateIsFree(dto.placa);
-    return this.vehicles.save(this.vehicles.create(dto));
+  async create(dto: CreateVehicleDto) {
+    await this.checkPlate(dto.placa);
+    return this.vehicleRepository.save(this.vehicleRepository.create(dto));
   }
 
-  async findAll(query: VehicleQueryDto): Promise<Paginated<Vehicle>> {
-    const sortBy = SORTABLE_COLUMNS.find((c) => c === query.sortBy) ?? 'id';
-    const [items, total] = await this.vehicles.findAndCount({
+  async findAll(query: VehicleQueryDto) {
+    const [items, total] = await this.vehicleRepository.findAndCount({
       where: query.estado ? { estado: query.estado } : {},
-      order: { [sortBy]: query.order },
-      skip: query.skip,
+      order: { id: 'ASC' },
+      skip: (query.page - 1) * query.limit,
       take: query.limit,
     });
     return { items, total, page: query.page, limit: query.limit };
   }
 
-  async findOne(id: number): Promise<Vehicle> {
-    const vehicle = await this.vehicles.findOneBy({ id });
-    if (!vehicle) throw new NotFoundException(`Vehículo ${id} no encontrado`);
+  async findOne(id: number) {
+    const vehicle = await this.vehicleRepository.findOneBy({ id });
+    if (!vehicle) {
+      throw new NotFoundException(`Vehículo ${id} no encontrado`);
+    }
     return vehicle;
   }
 
-  async findByPlate(placa: string): Promise<Vehicle> {
-    const vehicle = await this.vehicles.findOneBy({
-      placa: placa.trim().toUpperCase(),
+  async findByPlate(placa: string) {
+    const vehicle = await this.vehicleRepository.findOneBy({
+      placa: placa.toUpperCase(),
     });
     if (!vehicle) {
       throw new NotFoundException(`Vehículo con placa ${placa} no encontrado`);
@@ -63,12 +56,12 @@ export class VehiclesService {
     return vehicle;
   }
 
-  async update(id: number, dto: UpdateVehicleDto): Promise<Vehicle> {
+  async update(id: number, dto: UpdateVehicleDto) {
     const vehicle = await this.findOne(id);
     if (dto.placa && dto.placa !== vehicle.placa) {
-      await this.assertPlateIsFree(dto.placa);
+      await this.checkPlate(dto.placa);
     }
-    // El odómetro solo avanza: un kilometraje menor indica un error de captura.
+    // El kilometraje solo puede subir
     if (
       dto.kilometraje !== undefined &&
       dto.kilometraje < vehicle.kilometraje
@@ -77,43 +70,38 @@ export class VehiclesService {
         `El kilometraje no puede ser menor al actual (${vehicle.kilometraje})`,
       );
     }
-    return this.vehicles.save(this.vehicles.merge(vehicle, dto));
+    Object.assign(vehicle, dto);
+    return this.vehicleRepository.save(vehicle);
   }
 
-  /**
-   * Eliminación lógica: el vehículo pasa a INACTIVE y conserva su historial.
-   * No se permite mientras tenga mantenimientos programados o en curso.
-   */
-  async deactivate(id: number): Promise<Vehicle> {
+  // Eliminación lógica: se marca INACTIVE y se conserva el historial
+  async deactivate(id: number) {
     const vehicle = await this.findOne(id);
-    if (vehicle.estado === VehicleStatus.INACTIVE) return vehicle;
-
-    const active = await this.maintenances.countBy({
+    const activeMaintenances = await this.maintenanceRepository.countBy({
       vehiculo: { id },
       estado: In([MaintenanceStatus.SCHEDULED, MaintenanceStatus.IN_PROGRESS]),
     });
-    if (active > 0) {
+    if (activeMaintenances > 0) {
       throw new ConflictException(
         'No se puede inactivar un vehículo con mantenimientos programados o en curso',
       );
     }
     vehicle.estado = VehicleStatus.INACTIVE;
-    return this.vehicles.save(vehicle);
+    return this.vehicleRepository.save(vehicle);
   }
 
-  async activate(id: number): Promise<Vehicle> {
+  async activate(id: number) {
     const vehicle = await this.findOne(id);
     if (vehicle.estado !== VehicleStatus.INACTIVE) {
-      throw new ConflictException(
-        `Solo se puede activar un vehículo INACTIVE (estado actual: ${vehicle.estado})`,
-      );
+      throw new ConflictException('Solo se puede activar un vehículo INACTIVE');
     }
     vehicle.estado = VehicleStatus.AVAILABLE;
-    return this.vehicles.save(vehicle);
+    return this.vehicleRepository.save(vehicle);
   }
 
-  private async assertPlateIsFree(placa: string): Promise<void> {
-    if (await this.vehicles.existsBy({ placa })) {
+  private async checkPlate(placa: string) {
+    const exists = await this.vehicleRepository.existsBy({ placa });
+    if (exists) {
       throw new ConflictException(`Ya existe un vehículo con placa ${placa}`);
     }
   }

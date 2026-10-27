@@ -4,33 +4,29 @@ import { Repository } from 'typeorm';
 import { Vehicle } from '../vehicles/entities/vehicle.entity.js';
 import { VehicleStatus } from '../vehicles/enums/vehicle-status.enum.js';
 
-export type FleetStatusSummary = Record<VehicleStatus, number> & {
-  total: number;
-};
-
 @Injectable()
 export class IntegrationsService {
   constructor(
-    @InjectRepository(Vehicle) private readonly vehicles: Repository<Vehicle>,
+    @InjectRepository(Vehicle)
+    private readonly vehicleRepository: Repository<Vehicle>,
   ) {}
 
-  /** Disponibilidad agregada de la flota para sistemas externos. */
-  async fleetStatus(): Promise<FleetStatusSummary> {
-    const rows = await this.vehicles
-      .createQueryBuilder('vehicle')
-      .select('vehicle.estado', 'estado')
-      .addSelect('COUNT(*)', 'count')
-      .groupBy('vehicle.estado')
-      .getRawMany<{ estado: VehicleStatus; count: string }>();
-
-    const summary = Object.fromEntries(
-      Object.values(VehicleStatus).map((status) => [status, 0]),
-    ) as FleetStatusSummary;
-    summary.total = 0;
-    for (const { estado, count } of rows) {
-      summary[estado] = Number(count);
-      summary.total += Number(count);
-    }
-    return summary;
+  // Cantidad de vehículos por estado, para sistemas externos
+  async fleetStatus() {
+    const available = await this.vehicleRepository.countBy({
+      estado: VehicleStatus.AVAILABLE,
+    });
+    const inMaintenance = await this.vehicleRepository.countBy({
+      estado: VehicleStatus.IN_MAINTENANCE,
+    });
+    const inactive = await this.vehicleRepository.countBy({
+      estado: VehicleStatus.INACTIVE,
+    });
+    return {
+      AVAILABLE: available,
+      IN_MAINTENANCE: inMaintenance,
+      INACTIVE: inactive,
+      total: available + inMaintenance + inactive,
+    };
   }
 }

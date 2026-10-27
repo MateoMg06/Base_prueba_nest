@@ -47,9 +47,9 @@ export class AuthController {
   })
   register(
     @Body() dto: RegisterDto,
-    @CurrentUser() requester?: AuthenticatedUser,
+    @CurrentUser() currentUser?: AuthenticatedUser,
   ) {
-    return this.authService.register(dto, requester);
+    return this.authService.register(dto, currentUser);
   }
 
   @Public()

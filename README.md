@@ -38,7 +38,7 @@ Todas las operaciones son exclusivas del rol `ADMIN`.
 | Método | Ruta | Descripción |
 |---|---|---|
 | POST | `/vehicles` | Registrar (placa única, nace `AVAILABLE`) |
-| GET | `/vehicles?page&limit&sortBy&order&estado` | Listar paginado |
+| GET | `/vehicles?page&limit&estado` | Listar paginado |
 | GET | `/vehicles/:id` · `/vehicles/plate/:placa` | Consultar por id o placa |
 | PATCH | `/vehicles/:id` | Actualizar (el kilometraje no puede bajar) |
 | DELETE | `/vehicles/:id` | Inactivar (eliminación lógica; 409 si tiene mantenimientos activos) |
@@ -53,7 +53,7 @@ Todas las operaciones son exclusivas del rol `ADMIN`.
 | Método | Ruta | Descripción |
 |---|---|---|
 | POST | `/mechanics` | Registrar (correo único, nace `ACTIVE`; `usuarioId` opcional de un TECHNICIAN) |
-| GET | `/mechanics?page&limit&sortBy&order&estado` | Listar paginado |
+| GET | `/mechanics?page&limit&estado` | Listar paginado |
 | GET | `/mechanics/:id` | Consultar uno |
 | PATCH | `/mechanics/:id` | Actualizar |
 | PATCH | `/mechanics/:id/deactivate` | Inactivar (conserva historial; 409 si tiene mantenimientos activos) |

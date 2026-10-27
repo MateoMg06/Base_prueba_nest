@@ -12,14 +12,8 @@ import {
 } from '../interfaces/authenticated-user.interface.js';
 import { isPublicRoute } from '../utils/is-public.util.js';
 
-/**
- * Guard 1/2 – Autenticación por JWT (Authorization: Bearer <token>).
- * Registrado globalmente: toda ruta exige token salvo las marcadas con @Public().
- *
- * - Sin token, token mal formado, firma inválida o expirado → 401.
- * - En rutas públicas el token es opcional: si llega y es válido se adjunta
- *   request.user (p. ej. un ADMIN registrando a otro ADMIN); si no, se ignora.
- */
+// Guard global: toda ruta pide "Authorization: Bearer <token>" salvo las @Public().
+// Sin token, token inválido o expirado -> 401.
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
@@ -29,21 +23,25 @@ export class JwtAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
-    const token = this.extractBearerToken(request);
+    const token = this.getToken(request);
 
+    // En rutas públicas el token es opcional (lo usa /auth/register para
+    // saber si quien registra es ADMIN).
     if (isPublicRoute(this.reflector, context)) {
-      if (token) request.user = await this.verify(token).catch(() => undefined);
+      if (token) {
+        request.user = await this.verifyToken(token).catch(() => undefined);
+      }
       return true;
     }
 
     if (!token) {
       throw new UnauthorizedException('Falta el token de acceso (Bearer)');
     }
-    request.user = await this.verify(token);
+    request.user = await this.verifyToken(token);
     return true;
   }
 
-  private async verify(token: string) {
+  private async verifyToken(token: string) {
     try {
       const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
       return { id: payload.sub, email: payload.email, role: payload.role };
@@ -52,8 +50,8 @@ export class JwtAuthGuard implements CanActivate {
     }
   }
 
-  private extractBearerToken(request: RequestWithUser): string | undefined {
+  private getToken(request: RequestWithUser) {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' && token ? token : undefined;
+    return type === 'Bearer' ? token : undefined;
   }
 }

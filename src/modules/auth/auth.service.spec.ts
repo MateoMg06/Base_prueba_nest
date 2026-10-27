@@ -9,10 +9,10 @@ import { AuthService } from './auth.service.js';
 
 describe('AuthService', () => {
   const jwtService = new JwtService({ secret: 'x'.repeat(32) });
-  const config = { getOrThrow: () => 3600 } as unknown as ConfigService;
+  const config = { get: () => 3600 } as unknown as ConfigService;
   let users: {
     create: ReturnType<typeof vi.fn>;
-    findByEmailWithPassword: ReturnType<typeof vi.fn>;
+    findByEmail: ReturnType<typeof vi.fn>;
   };
   let service: AuthService;
 
@@ -21,7 +21,7 @@ describe('AuthService', () => {
       create: vi.fn((data: Partial<User>) =>
         Promise.resolve({ id: 7, ...data } as User),
       ),
-      findByEmailWithPassword: vi.fn(),
+      findByEmail: vi.fn(),
     };
     service = new AuthService(
       users as unknown as UsersService,
@@ -64,7 +64,7 @@ describe('AuthService', () => {
   });
 
   it('emite un JWT verificable con el rol del usuario al iniciar sesión', async () => {
-    users.findByEmailWithPassword.mockResolvedValue({
+    users.findByEmail.mockResolvedValue({
       id: 1,
       nombre: 'Admin',
       email: 'admin@fleetcore.com',
@@ -84,7 +84,7 @@ describe('AuthService', () => {
   });
 
   it('responde 401 genérico con contraseña errónea o correo inexistente', async () => {
-    users.findByEmailWithPassword.mockResolvedValue(null);
+    users.findByEmail.mockResolvedValue(null);
     await expect(
       service.login({ email: 'no@fleetcore.com', password: 'x' }),
     ).rejects.toThrow(UnauthorizedException);
